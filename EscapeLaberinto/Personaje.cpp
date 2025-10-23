@@ -55,7 +55,7 @@ void Personaje::update()
     }
 
     if (_sprite.getGlobalBounds().top + _sprite.getGlobalBounds().height > _resInfY) {
-        _sprite.setPosition(_sprite.getPosition().x, _resInfY +(_sprite.getGlobalBounds().height - _sprite.getOrigin().y));
+        _sprite.setPosition(_sprite.getPosition().x, _resInfY + (_sprite.getGlobalBounds().height - _sprite.getOrigin().y));
     }
 
 }
@@ -78,7 +78,7 @@ void Personaje::addVelocity(float velocity)
 
 void Personaje::restartVelocity()
 {
-    _velocity.x=2;
+    _velocity.x = 2;
     _velocity.y = 2;
 }
 

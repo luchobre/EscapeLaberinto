@@ -1,11 +1,13 @@
 #include <SFML/Graphics.hpp>
 #include <cstdlib>
 #include <ctime>
+#include <array>
 #include "Personaje.h"
 #include "Enemigo.h"
 #include "Item.h"
 #include "Colisionable.h"
 #include "ItemPowerUp.h"
+#include "Laberinto.h"
 
 
 int main()
@@ -28,13 +30,45 @@ int main()
     Enemigo monstruo;
     Item item;
     item.respawn();
-    
+
     ItemPowerUp itemPu;
     itemPu.respawn();
-    int timer = 60*5;
+    int timer = 60 * 5;
 
 
     int puntos = 0;
+
+
+    //Laberinto
+
+    constexpr std::array level = {
+    3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
+    3,0,0,0,0,0,3,0,0,0,3,0,0,0,3,0,0,0,0,0,0,0,0,0,3,
+    3,0,3,3,3,0,3,0,3,0,3,0,3,0,3,0,3,3,3,3,3,3,0,0,3,
+    3,0,3,0,0,0,3,0,3,0,3,0,3,0,3,0,0,0,0,0,0,3,0,0,3,
+    3,0,3,0,3,3,3,0,3,0,3,0,3,0,3,3,3,3,3,3,0,3,0,0,3,
+    3,0,0,0,3,0,0,0,3,0,0,0,3,0,0,0,0,0,0,3,0,3,0,0,3,
+    3,0,3,0,3,0,3,3,3,3,3,0,3,3,3,3,3,3,0,3,0,3,3,3,3,
+    3,0,3,0,0,0,3,0,0,0,3,0,0,0,3,0,0,3,0,3,0,0,0,0,3,
+    3,0,3,3,3,0,3,0,3,0,3,3,3,0,3,0,3,3,0,3,3,3,3,0,3,
+    3,0,0,0,3,0,3,0,3,0,0,0,0,0,3,0,0,0,0,3,0,0,3,0,3,
+    3,3,3,0,3,0,3,0,3,3,3,3,3,0,3,0,3,3,3,3,0,3,3,0,3,
+    3,0,0,0,3,0,0,0,0,0,0,0,3,0,0,0,3,0,0,0,0,0,3,0,3,
+    3,0,3,3,3,3,3,3,3,3,3,0,3,3,3,3,3,3,3,3,3,0,3,0,3,
+    3,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,3,0,3,
+    3,0,3,3,3,3,3,2,2,2,1,1,1,2,2,2,3,3,3,3,3,0,3,0,3,
+    3,0,3,0,0,0,0,2,1,1,1,1,1,1,1,2,0,0,0,0,3,0,3,0,3,
+    3,0,3,0,3,3,3,2,2,2,1,1,1,2,2,2,3,3,3,0,3,0,3,0,3,
+    3,0,3,0,3,0,0,0,0,0,0,0,0,0,0,0,3,0,3,0,3,0,3,0,3,
+    3,0,0,0,3,0,3,3,3,3,3,3,3,3,3,0,3,0,0,0,3,0,0,0,3,
+    3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3
+    };
+
+    Laberinto laberinto;
+    if (!laberinto.load("tileset.png", { 32, 30 }, level.data(), 25, 20)) {
+        return -1;
+    }
+
 
     //Game Loop
 
@@ -61,7 +95,7 @@ int main()
 
         guerrero.update();
         monstruo.update();
-        
+
         if (guerrero.isColisionable(item)) {
             item.respawn();
             puntos++;
@@ -76,7 +110,7 @@ int main()
 
         if (timer == 0 && guerrero.isColisionable(itemPu)) {
             guerrero.addVelocity(1);
-            timer = 60*5;
+            timer = 60 * 5;
             itemPu.respawn();
         }
 
@@ -85,6 +119,7 @@ int main()
         window.clear();
 
         //Draw
+        window.draw(laberinto);
         window.draw(guerrero);
         window.draw(monstruo);
         window.draw(item);
