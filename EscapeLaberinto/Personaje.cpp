@@ -3,7 +3,7 @@
 
 Personaje::Personaje()
 {
-    _velocity = { 1,1 };
+    _velocity = { 2,2 };
     _texture.loadFromFile("playerIcon.png");
     _sprite.setTexture(_texture);
     _resIzqX = 0;
@@ -36,14 +36,26 @@ void Personaje::update(const Laberinto& laberinto)
     }
 
 
-    //para ver si es caminable 
-    sf::Vector2f nuevaPos = _sprite.getPosition() + velocity; 
-    if (laberinto.esCaminable(nuevaPos, { 32, 30 })) { 
-        _sprite.move(velocity); 
+    //para ver si es caminable
+    sf::Vector2f nuevaPos = _sprite.getPosition() + velocity;
+
+    sf::Vector2f topLeft(_sprite.getGlobalBounds().left, _sprite.getGlobalBounds().top);
+    sf::Vector2f topRight(_sprite.getGlobalBounds().left + _sprite.getGlobalBounds().width, _sprite.getGlobalBounds().top);
+    sf::Vector2f bottomLeft(_sprite.getGlobalBounds().left, _sprite.getGlobalBounds().top + _sprite.getGlobalBounds().height);
+    sf::Vector2f bottomRight(_sprite.getGlobalBounds().left + _sprite.getGlobalBounds().width, _sprite.getGlobalBounds().top + _sprite.getGlobalBounds().height);
+
+    bool puedeMoverse =
+        laberinto.esCaminable(topLeft + velocity, { 32, 30 }) &&
+        laberinto.esCaminable(topRight + velocity, { 32, 30 }) &&
+        laberinto.esCaminable(bottomLeft + velocity, { 32, 30 }) &&
+        laberinto.esCaminable(bottomRight + velocity, { 32, 30 });
+
+    if (puedeMoverse) {
+        _sprite.move(velocity);
     }
 
     //
-    _sprite.move(velocity); 
+
     if (velocity.x < 0) { 
         _sprite.setScale(-0.5f, 0.5f);
     } 
@@ -87,8 +99,8 @@ void Personaje::addVelocity(float velocity)
 
 void Personaje::restartVelocity()
 {
-    _velocity.x = 1;
-    _velocity.y = 1;
+    _velocity.x = 2;
+    _velocity.y = 2;
 }
 
 sf::FloatRect Personaje::getBounds() const
