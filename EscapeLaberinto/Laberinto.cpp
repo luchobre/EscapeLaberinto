@@ -1,3 +1,4 @@
+#include <vector>
 #include "Laberinto.h"
 
 bool Laberinto::load(const std::string& tileset, sf::Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height)
@@ -37,7 +38,20 @@ bool Laberinto::load(const std::string& tileset, sf::Vector2u tileSize, const in
         }
     }
 
+    m_tiles.assign(tiles, tiles + width * height);
     return true;
+}
+
+bool Laberinto::esCaminable(sf::Vector2f posicion, sf::Vector2u tilesize) const
+{
+    int col = posicion.x / tilesize.x;
+    int row = posicion.y / tilesize.y;
+
+    if(col<0 || row<0 || col >=25 || row >=20)
+        return false;
+
+    int tileNumber = m_tiles[row * 25 + col];
+    return tileNumber == 0;
 }
 
 void Laberinto::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -46,3 +60,4 @@ void Laberinto::draw(sf::RenderTarget& target, sf::RenderStates states) const
     states.texture = &m_tileset;
     target.draw(m_vertices, states);
 }
+

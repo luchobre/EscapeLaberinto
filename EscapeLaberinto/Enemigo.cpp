@@ -3,7 +3,7 @@
 Enemigo::Enemigo()
 {
     _velocity = {3,3};
-    _texture.loadFromFile("enemyIcon1.png");
+    _texture.loadFromFile("swish_crocman.png");
     _sprite.setTexture(_texture);
     _resIzqX = 0;
     _resDerX = 800;

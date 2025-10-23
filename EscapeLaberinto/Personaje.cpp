@@ -1,19 +1,22 @@
 #include "Personaje.h"
+#include "Laberinto.h"
 
 Personaje::Personaje()
 {
-    _velocity = { 2,2 };
-    _texture.loadFromFile("playerIcon3.png");
+    _velocity = { 1,1 };
+    _texture.loadFromFile("playerIcon.png");
     _sprite.setTexture(_texture);
     _resIzqX = 0;
     _resDerX = 800;
     _resSupY = 0;
     _resInfY = 600;
     _sprite.setOrigin(_sprite.getGlobalBounds().width / 2, _sprite.getGlobalBounds().height);
+    _sprite.setScale(0.5f, 0.5f);
 }
 
-void Personaje::update()
+void Personaje::update(const Laberinto& laberinto)
 {
+
     sf::Vector2f velocity = { 0,0 };
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
@@ -21,7 +24,7 @@ void Personaje::update()
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) {
-        velocity.y = _velocity.y;
+            velocity.y = _velocity.y;
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
@@ -29,17 +32,23 @@ void Personaje::update()
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
-        velocity.x = -_velocity.y;
+        velocity.x = -_velocity.x;
     }
 
-    _sprite.move(velocity);
 
-    if (velocity.x < 0) {
-        _sprite.setScale(-1, 1);
+    //para ver si es caminable 
+    sf::Vector2f nuevaPos = _sprite.getPosition() + velocity; 
+    if (laberinto.esCaminable(nuevaPos, { 32, 30 })) { 
+        _sprite.move(velocity); 
     }
 
-    if (velocity.x > 0) {
-        _sprite.setScale(1, 1);
+    //
+    _sprite.move(velocity); 
+    if (velocity.x < 0) { 
+        _sprite.setScale(-0.5f, 0.5f);
+    } 
+    if (velocity.x > 0) { 
+        _sprite.setScale(0.5f, 0.5f);
     }
 
     //Evitar que salga de la ventana
@@ -78,8 +87,8 @@ void Personaje::addVelocity(float velocity)
 
 void Personaje::restartVelocity()
 {
-    _velocity.x = 2;
-    _velocity.y = 2;
+    _velocity.x = 1;
+    _velocity.y = 1;
 }
 
 sf::FloatRect Personaje::getBounds() const

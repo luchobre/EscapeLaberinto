@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Colisionable.h"
+#include "Laberinto.h"
+
 class Personaje :public sf::Drawable, public Colisionable
 {
 	sf::Sprite _sprite;
@@ -13,7 +15,7 @@ class Personaje :public sf::Drawable, public Colisionable
 	int _resInfY;
 public:
 	Personaje();
-	void update();
+	void update(const Laberinto& laberinto);
 	void draw(sf::RenderTarget& target, sf::RenderStates states)const override;
 	void respawnPj(); //prueba
 	sf::FloatRect getBounds() const override;

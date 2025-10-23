@@ -93,7 +93,7 @@ int main()
             timer--;
         }
 
-        guerrero.update();
+        guerrero.update(laberinto);
         monstruo.update();
 
         if (guerrero.isColisionable(item)) {
