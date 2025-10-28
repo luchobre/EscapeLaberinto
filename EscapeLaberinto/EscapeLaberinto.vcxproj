@@ -133,6 +133,7 @@
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemPowerUp.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Personaje.cpp" />
     <ClCompile Include="Colisionable.cpp" />
     <ClCompile Include="Laberinto.cpp" />
@@ -143,6 +144,7 @@
     <ClInclude Include="Laberinto.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemPowerUp.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Personaje.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
