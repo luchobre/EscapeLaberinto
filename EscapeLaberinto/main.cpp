@@ -151,7 +151,7 @@ int main()
             }
 
             guerrero.update(laberinto);
-            monstruo.update();
+            monstruo.update(laberinto);
 
             if (guerrero.isColisionable(item)) {
                 item.respawn();
