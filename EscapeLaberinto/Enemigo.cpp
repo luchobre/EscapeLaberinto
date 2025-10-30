@@ -9,7 +9,7 @@ Enemigo::Enemigo()
     _sprite.setScale(0.8f, 0.8f);
     _sprite.setPosition(740.f, 500.f);
     
-    _velocidad = 5.5f;
+    _velocidad = 3.3f;
     _tileSize = 32;
     _resIzqX = 0;
     _resDerX = 800;
