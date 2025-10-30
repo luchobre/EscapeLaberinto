@@ -1,7 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include <filesystem>
 
 class Laberinto : public sf::Drawable, public sf::Transformable
 {
@@ -9,7 +8,9 @@ public:
     bool load(const std::string& tileset, sf::Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height);
 
     //para caminar solo sobre el pasto
-    bool esCaminable(sf::Vector2f posicion, sf::Vector2u tilesize) const;
+    bool esCaminable(sf::FloatRect bounds, sf::Vector2u tileSize) const;
+
+    sf::Vector2u getTileSize() const;
   
 private:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -19,4 +20,8 @@ private:
 
     //se guardan los tiles para ver que no se choque
     std::vector<int> m_tiles;
+
+    sf::Vector2u m_tileSize;
+    unsigned int m_width;
+    unsigned int m_height;
 };

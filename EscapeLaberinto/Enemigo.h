@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Colisionable.h"
-#include "Laberinto.h";
+#include "Laberinto.h"
 
 class Enemigo :public sf::Drawable, public Colisionable
 {

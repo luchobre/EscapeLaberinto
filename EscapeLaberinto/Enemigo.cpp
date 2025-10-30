@@ -6,10 +6,10 @@ Enemigo::Enemigo()
 {
     _texture.loadFromFile("swish_crocman.png");
     _sprite.setTexture(_texture);
-    _sprite.setScale(0.5f, 0.5f);
-    _sprite.setPosition(64.f, 64.f);
+    _sprite.setScale(0.8f, 0.8f);
+    _sprite.setPosition(740.f, 500.f);
     
-    _velocidad = 1.5f;
+    _velocidad = 5.5f;
     _tileSize = 32;
     _resIzqX = 0;
     _resDerX = 800;
@@ -56,10 +56,14 @@ void Enemigo::update(const Laberinto& laberinto)
         }
     }
 
-    int tileX = static_cast<int>((nuevaPosicion.x + _tileSize / 2) / _tileSize);
-    int tileY = static_cast<int>((nuevaPosicion.y + _tileSize / 2) / _tileSize);
 
-    if (laberinto.esCaminable(nuevaPosicion, sf::Vector2u(_tileSize, _tileSize))) {
+    sf::FloatRect bounds = _sprite.getGlobalBounds();
+    bounds.left = nuevaPosicion.x;
+    bounds.top = nuevaPosicion.y;
+
+    bool puedeMoverse = laberinto.esCaminable(bounds, sf::Vector2u(_tileSize, _tileSize));
+   
+    if (puedeMoverse) {
         _sprite.setPosition(nuevaPosicion);
     }
     else {
@@ -78,9 +82,8 @@ void Enemigo::update(const Laberinto& laberinto)
         }
 
     }
+ 
 }   
-
-
 
 void Enemigo::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {

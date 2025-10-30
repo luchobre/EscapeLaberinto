@@ -6,12 +6,15 @@ Personaje::Personaje()
     _velocity = { 2,2 };
     _texture.loadFromFile("playerIcon.png");
     _sprite.setTexture(_texture);
+    _sprite.setScale(0.5f, 0.5f);
+    sf::FloatRect bounds = _sprite.getLocalBounds();
+    _sprite.setOrigin(_sprite.getGlobalBounds().width, _sprite.getGlobalBounds().height);
+
+
     _resIzqX = 0;
     _resDerX = 800;
     _resSupY = 0;
     _resInfY = 600;
-    _sprite.setOrigin(_sprite.getGlobalBounds().width / 2, _sprite.getGlobalBounds().height);
-    _sprite.setScale(0.5f, 0.5f);
 }
 
 void Personaje::update(const Laberinto& laberinto)
@@ -35,49 +38,42 @@ void Personaje::update(const Laberinto& laberinto)
         velocity.x = -_velocity.x;
     }
 
+    if (velocity.x == 0 && velocity.y == 0) {
+        return;
+    }
 
-    //para ver si es caminable
-    sf::Vector2f nuevaPos = _sprite.getPosition() + velocity;
+    sf::FloatRect newBounds = _sprite.getGlobalBounds();
+    newBounds.left += velocity.x;
+    newBounds.top += velocity.y;
 
-    sf::Vector2f topLeft(_sprite.getGlobalBounds().left, _sprite.getGlobalBounds().top);
-    sf::Vector2f topRight(_sprite.getGlobalBounds().left + _sprite.getGlobalBounds().width, _sprite.getGlobalBounds().top);
-    sf::Vector2f bottomLeft(_sprite.getGlobalBounds().left, _sprite.getGlobalBounds().top + _sprite.getGlobalBounds().height);
-    sf::Vector2f bottomRight(_sprite.getGlobalBounds().left + _sprite.getGlobalBounds().width, _sprite.getGlobalBounds().top + _sprite.getGlobalBounds().height);
+    sf::Vector2u tileSize = laberinto.getTileSize();
 
-    bool puedeMoverse =
-        laberinto.esCaminable(topLeft + velocity, { 32, 30 }) &&
-        laberinto.esCaminable(topRight + velocity, { 32, 30 }) &&
-        laberinto.esCaminable(bottomLeft + velocity, { 32, 30 }) &&
-        laberinto.esCaminable(bottomRight + velocity, { 32, 30 });
+    bool puedeMoverse = laberinto.esCaminable(newBounds, tileSize);
 
     if (puedeMoverse) {
         _sprite.move(velocity);
     }
 
-    //
-
-    if (velocity.x < 0) { 
+    if (velocity.x < 0) {
         _sprite.setScale(-0.5f, 0.5f);
-    } 
-    if (velocity.x > 0) { 
+    }
+    else if (velocity.x > 0) {
         _sprite.setScale(0.5f, 0.5f);
     }
 
-    //Evitar que salga de la ventana
-    if (_sprite.getGlobalBounds().left < _resIzqX) {
-        _sprite.setPosition(_sprite.getOrigin().x, _sprite.getPosition().y);
-    }
-    if (_sprite.getGlobalBounds().top < 0) {
-        _sprite.setPosition(_sprite.getPosition().x, _sprite.getOrigin().y);
-    }
+    if (_sprite.getPosition().x < _resIzqX + _sprite.getGlobalBounds().width / 2)
+        _sprite.setPosition(_resIzqX + _sprite.getGlobalBounds().width / 2, _sprite.getPosition().y);
 
-    if (_sprite.getGlobalBounds().left + _sprite.getGlobalBounds().width > _resDerX) {
-        _sprite.setPosition(_resDerX - (_sprite.getGlobalBounds().width - _sprite.getOrigin().x), _sprite.getPosition().y);
-    }
+    if (_sprite.getPosition().x > _resDerX - _sprite.getGlobalBounds().width / 2)
+        _sprite.setPosition(_resDerX - _sprite.getGlobalBounds().width / 2, _sprite.getPosition().y);
 
-    if (_sprite.getGlobalBounds().top + _sprite.getGlobalBounds().height > _resInfY) {
-        _sprite.setPosition(_sprite.getPosition().x, _resInfY + (_sprite.getGlobalBounds().height - _sprite.getOrigin().y));
-    }
+    if (_sprite.getPosition().y < _resSupY + _sprite.getGlobalBounds().height / 2)
+        _sprite.setPosition(_sprite.getPosition().x, _resSupY + _sprite.getGlobalBounds().height / 2);
+
+    if (_sprite.getPosition().y > _resInfY - _sprite.getGlobalBounds().height / 2)
+        _sprite.setPosition(_sprite.getPosition().x, _resInfY - _sprite.getGlobalBounds().height / 2);
+
+
 
 }
 
@@ -88,7 +84,7 @@ void Personaje::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Personaje::respawnPj()
 {
-    return _sprite.setPosition(50, 50);
+    _sprite.setPosition(50, 50);
 }
 
 void Personaje::addVelocity(float velocity)
