@@ -23,7 +23,7 @@ int main()
 
     Menu menu(window.getSize().x, window.getSize().y);
 
-    enum EstadoJuego { EN_MENU, EN_CREDITOS, EN_JUEGO };
+    enum EstadoJuego { EN_MENU, EN_CREDITOS, EN_JUEGO, EN_PAUSA };
     EstadoJuego estado = EN_MENU;
 
     sf::Font font;
@@ -99,6 +99,41 @@ int main()
                 if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
                     estado = EN_MENU;
             }
+            else if (estado == EN_PAUSA)  // MENU DE PAUSA
+            {
+                if (event.type == sf::Event::KeyPressed)
+                {
+                    if (event.key.code == sf::Keyboard::Up)
+                        menu.MoveUpPausa();
+                    else if (event.key.code == sf::Keyboard::Down)
+                        menu.MoveDownPausa();
+                    else if (event.key.code == sf::Keyboard::Enter)
+                    {
+                        int opcion = menu.GetPressedItemPausa();
+                        if (opcion == 0) {
+                            estado = EN_JUEGO;
+                        }
+                        else if (opcion == 1) {                    
+                            estado = EN_JUEGO;
+                            muertes = 0;
+                            puntos = 0;
+                            guerrero.respawnPj();
+                            gameover = false;
+                        }
+                        else if (opcion == 2) {                    
+                            estado = EN_MENU;
+                            muertes = 0;
+                            puntos = 0;
+                            guerrero.respawnPj();
+                            gameover = false;
+                        }
+                    }
+                    else if (event.key.code == sf::Keyboard::Escape) {
+                        estado = EN_JUEGO;  // PARA PODER VOLVER AL JUEGO CON ESC
+                    }
+                }
+                
+            }
             else if (estado == EN_JUEGO && gameover) {
                 if (event.type == sf::Event::KeyPressed) {
                     if (event.key.code == sf::Keyboard::Enter) {
@@ -170,8 +205,18 @@ int main()
                     }
                 }
             }
-            else 
+            else
             {
+                // VERIFICAR SI SE PRESIONA ESC PARA PAUSAR  NUEVO
+                static bool escPresionado = false; 
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && !escPresionado) {
+                    estado = EN_PAUSA;
+                    escPresionado = true;
+                }
+                if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+                    escPresionado = false;
+                }
+            
                 if (timer > 0) timer--;
 
                 guerrero.update(laberinto);
@@ -211,6 +256,20 @@ int main()
                 if (timer == 0)
                     window.draw(itemPu);
             }
+        }
+        else if (estado == EN_PAUSA)
+        {
+            //ACA SE CONGELA EL JUEGO DE FONDO
+            window.draw(laberinto);
+            window.draw(guerrero);
+            window.draw(monstruo);
+            window.draw(item);
+            window.draw(text);
+
+            if (timer == 0)
+                window.draw(itemPu);
+
+            menu.drawPausa(window); //MENU DE PAUSA ENCIMA
         }
 
             

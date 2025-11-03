@@ -26,6 +26,24 @@ Menu::Menu(float width, float height)
 
     selectedItemIndex = 0;
 
+    // ====== MENÚ PAUSA ======
+    menuPausa[0].setFont(font);
+    menuPausa[0].setFillColor(sf::Color::Red);
+    menuPausa[0].setString("Continuar");
+    menuPausa[0].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENU + 1) * 1));
+        
+    menuPausa[1].setFont(font);
+    menuPausa[1].setFillColor(sf::Color::White);
+    menuPausa[1].setString("Reiniciar partida");
+    menuPausa[1].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENU + 1) * 2));
+       
+    menuPausa[2].setFont(font);
+    menuPausa[2].setFillColor(sf::Color::White);
+    menuPausa[2].setString("Salir al menu principal");
+    menuPausa[2].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENU + 1) * 3));
+
+    selectedItemIndexPausa = 0;
+
     // ====== CONTENIDO DE CRÉDITOS ======
     contenidoCreditos.setFont(font);
     contenidoCreditos.setCharacterSize(50);   // tamaño más grande
@@ -47,6 +65,7 @@ void Menu::draw(sf::RenderWindow& window)
         window.draw(menu[i]);
     }
 }
+
 
 void Menu::drawCreditos(sf::RenderWindow& window)
 {
@@ -78,4 +97,47 @@ void Menu::MoveDown()
 int Menu::GetPressedItem()
 {
     return selectedItemIndex;
+}
+
+//METODOS PARA MENU DE PAUSA
+void Menu::drawPausa(sf::RenderWindow& window)
+{
+    //RECTANGULO NEGRO SEMITRANSPARENTE PARA QUE SE VEA COOL
+    sf::RectangleShape fondo;
+    fondo.setSize(sf::Vector2f(window.getSize().x, window.getSize().y));
+    fondo.setFillColor(sf::Color(0, 0, 0, 150));
+    window.draw(fondo);
+
+
+    for (int i = 0; i < ITEMS_MENUPAUSA; i++)
+    {
+        window.draw(menuPausa[i]);
+    }
+
+}
+
+
+void Menu::MoveUpPausa()
+{
+    if (selectedItemIndexPausa - 1 >= 0)
+    {
+        menuPausa[selectedItemIndexPausa].setFillColor(sf::Color::White);
+        selectedItemIndexPausa--;
+        menuPausa[selectedItemIndexPausa].setFillColor(sf::Color::Red);
+    }
+}
+
+void Menu::MoveDownPausa()
+{
+    if (selectedItemIndexPausa + 1 < ITEMS_MENUPAUSA)
+    {
+        menuPausa[selectedItemIndexPausa].setFillColor(sf::Color::White);
+        selectedItemIndexPausa++;
+        menuPausa[selectedItemIndexPausa].setFillColor(sf::Color::Red);
+    }
+}
+
+int Menu::GetPressedItemPausa()
+{
+    return selectedItemIndexPausa;
 }
