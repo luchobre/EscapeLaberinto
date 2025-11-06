@@ -21,6 +21,64 @@ int main()
     sf::RenderWindow window(sf::VideoMode(800, 640), "Escape del Laberinto");
     window.setFramerateLimit(60);
 
+    // -- Carga de corazones para la vida 
+
+    sf::Texture texCorazonLleno, texCorazonVacio;
+    if (!texCorazonLleno.loadFromFile("corazonRojo.png"))
+        std::cout << "Error: no se pudo cargar corazonRojo.png";
+    if (!texCorazonVacio.loadFromFile("corazonVacio.png"))
+        std::cout << "Error: no se pudo cargar corazonVacio.png";
+
+     int NUM_VIDAS = 3;
+    std::vector<sf::Sprite> corazones(NUM_VIDAS);
+    for (int i = 0; i < NUM_VIDAS; ++i) {
+        corazones[i].setTexture(texCorazonLleno); // textura por defecto
+        corazones[i].setOrigin(0.f, 0.f);         // origen en esquina
+    }
+
+    //  altura  para los corazones
+     float targetHeight = 40.f;
+    float scaleLleno = targetHeight / static_cast<float>(texCorazonLleno.getSize().y);
+    float scaleVacio = targetHeight / static_cast<float>(texCorazonVacio.getSize().y);
+    
+    float espacio = 4.f;      // espacio entre corazones
+    float margenDerecho = 10.f; // distancia al borde derecho
+
+    // anchos escalados según si el sprite estará lleno o vacío
+    std::vector<float> scaledWidths(NUM_VIDAS);
+    for (int i = 0; i < NUM_VIDAS; ++i) {
+        bool seraLleno = (i < NUM_VIDAS - muertes); // true si esta vida todavía existe
+        if (seraLleno) {
+            corazones[i].setTexture(texCorazonLleno);          // textura llena
+            corazones[i].setScale(scaleLleno, scaleLleno);     // escala para igualar alto
+            scaledWidths[i] = texCorazonLleno.getSize().x * scaleLleno;
+        }
+        else {
+            corazones[i].setTexture(texCorazonVacio);          // textura vacía
+            corazones[i].setScale(scaleVacio, scaleVacio);     // escala para igualar alto
+            scaledWidths[i] = texCorazonVacio.getSize().x * scaleVacio;
+        }
+    }
+
+    //  ancho + espacios entre ellos
+    float totalWidth = 0.f;
+    for (int i = 0; i < NUM_VIDAS; ++i) {
+        totalWidth += scaledWidths[i];
+        if (i < NUM_VIDAS - 1) totalWidth += espacio;
+    }
+
+    // Posición inicial 
+    float startX = static_cast<float>(window.getSize().x) - margenDerecho - totalWidth;
+    float y = 10.f; // altura fija desde arriba 
+
+    // Posicionamos y dibujamos
+    float x = startX;
+    for (int i = 0; i < NUM_VIDAS; ++i) {
+        corazones[i].setPosition(x, y);
+        window.draw(corazones[i]);
+        x += scaledWidths[i] + espacio;
+    }
+
     Menu menu(window.getSize().x, window.getSize().y);
 
     enum EstadoJuego { EN_MENU, EN_CREDITOS, EN_JUEGO, EN_PAUSA };
@@ -252,6 +310,19 @@ int main()
                 window.draw(monstruo);
                 window.draw(item);
                 window.draw(text);
+
+                // --- Muestra corazones 
+                for (int i = 0; i < 3; i++) {
+                    if (i < 3 - muertes) 
+
+                        corazones[i].setTexture(texCorazonLleno);
+                        
+                    else 
+                        corazones[i].setTexture(texCorazonVacio);
+                        
+
+                        window.draw(corazones[i]);
+                };
 
                 if (timer == 0)
                     window.draw(itemPu);
