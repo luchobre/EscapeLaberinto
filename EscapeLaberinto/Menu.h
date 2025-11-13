@@ -1,8 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-#define ITEMS_MENU 3
-#define ITEMS_MENUPAUSA 3
+#define ITEMS_MENU 3 
+#define ITEMS_MENUPAUSA 4
 
 class Menu
 {

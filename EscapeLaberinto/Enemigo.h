@@ -21,5 +21,12 @@ public:
 	void update(const Laberinto& laberinto);
 	void draw(sf::RenderTarget& target, sf::RenderStates states)const override;
 	sf::FloatRect getBounds() const override;
+	//PARA GUARDAR Y CARGAR
+	sf::Vector2f getDireccion() const;
+	float getVelocidad() const;         
+	sf::Vector2f getPosition() const;
+	void setDireccion(float dirX, float dirY); 
+	void setVelocidad(float velocidad);         
+	void setPosition(float x, float y);      
 };
 

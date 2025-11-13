@@ -8,7 +8,7 @@ Menu::Menu(float width, float height)
         std::cout << "HUBO UN PROBLEMA AL CARGAR LA FUENTE" << std::endl;
     }
 
-    // ====== MENÚ PRINCIPAL ======
+    //MENÚ PRINCIPAL
     menu[0].setFont(font);
     menu[0].setFillColor(sf::Color::Red);
     menu[0].setString("Jugar");
@@ -26,25 +26,31 @@ Menu::Menu(float width, float height)
 
     selectedItemIndex = 0;
 
-    // ====== MENÚ PAUSA ======
+    // MENU PAUSA 
     menuPausa[0].setFont(font);
     menuPausa[0].setFillColor(sf::Color::Red);
     menuPausa[0].setString("Continuar");
-    menuPausa[0].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENU + 1) * 1));
-        
+    menuPausa[0].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENUPAUSA + 1) * 1));
+
     menuPausa[1].setFont(font);
     menuPausa[1].setFillColor(sf::Color::White);
-    menuPausa[1].setString("Reiniciar partida");
-    menuPausa[1].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENU + 1) * 2));
-       
+    menuPausa[1].setString("Guardar Partida");  
+    menuPausa[1].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENUPAUSA + 1) * 2));
+
     menuPausa[2].setFont(font);
     menuPausa[2].setFillColor(sf::Color::White);
-    menuPausa[2].setString("Salir al menu principal");
-    menuPausa[2].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENU + 1) * 3));
+    menuPausa[2].setString("Reiniciar partida"); 
+    menuPausa[2].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENUPAUSA + 1) * 3));
+
+    menuPausa[3].setFont(font);
+    menuPausa[3].setFillColor(sf::Color::White);
+    menuPausa[3].setString("Salir al menu principal"); 
+    menuPausa[3].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENUPAUSA + 1) * 4));
+
 
     selectedItemIndexPausa = 0;
 
-    // ====== CONTENIDO DE CRÉDITOS ======
+    //CRÉDITOS
     contenidoCreditos.setFont(font);
     contenidoCreditos.setCharacterSize(50);   // tamaño más grande
     contenidoCreditos.setFillColor(sf::Color::Green );

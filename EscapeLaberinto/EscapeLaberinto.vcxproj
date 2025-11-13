@@ -129,7 +129,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ArchivoPartida.cpp" />
     <ClCompile Include="Enemigo.cpp" />
+    <ClCompile Include="GuardarPartida.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemPowerUp.cpp" />
     <ClCompile Include="main.cpp" />
@@ -139,8 +141,10 @@
     <ClCompile Include="Laberinto.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ArchivoPartida.h" />
     <ClInclude Include="Colisionable.h" />
     <ClInclude Include="Enemigo.h" />
+    <ClInclude Include="GuardarPartida.h" />
     <ClInclude Include="Laberinto.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemPowerUp.h" />

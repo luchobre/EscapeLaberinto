@@ -27,3 +27,15 @@ sf::FloatRect ItemPowerUp::getBounds() const
 {
     return _sprite.getGlobalBounds();
 }
+//PARA GUARDAR Y CARGAR
+sf::Vector2f ItemPowerUp::getPosition() const {
+    return _sprite.getPosition(); 
+}
+
+void ItemPowerUp::setPosition(float x, float y) {
+    _sprite.setPosition(x, y);
+}
+
+sf::Sprite& ItemPowerUp::getSprite() {
+    return _sprite;  
+}

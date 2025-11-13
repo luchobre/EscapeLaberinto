@@ -95,3 +95,29 @@ sf::FloatRect Enemigo::getBounds() const
     return _sprite.getGlobalBounds();
 }
 
+//PARA GUARDAR Y CARGAR
+sf::Vector2f Enemigo::getDireccion() const {
+    return _direccion;
+}
+
+float Enemigo::getVelocidad() const {
+    return _velocidad;
+}
+
+sf::Vector2f Enemigo::getPosition() const {
+    return _sprite.getPosition();
+}
+
+void Enemigo::setDireccion(float dirX, float dirY) {
+    _direccion.x = dirX;  
+    _direccion.y = dirY;  
+}
+
+void Enemigo::setVelocidad(float velocidad) {
+    _velocidad = velocidad;
+}
+
+void Enemigo::setPosition(float x, float y) {
+    _sprite.setPosition(x, y);
+}
+

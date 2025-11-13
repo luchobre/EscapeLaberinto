@@ -103,3 +103,21 @@ sf::FloatRect Personaje::getBounds() const
 {
     return _sprite.getGlobalBounds();
 }
+
+//PARA GUARDAR Y CARGAR
+sf::Vector2f Personaje::getVelocity() const {
+    return _velocity;
+}
+
+sf::Vector2f Personaje::getPosition() const {
+    return _sprite.getPosition();
+}
+
+void Personaje::setVelocity(float velX, float velY) {
+    _velocity.x = velX;
+    _velocity.y = velY;
+}
+
+void Personaje::setPosition(float x, float y) {
+    _sprite.setPosition(x, y);
+}

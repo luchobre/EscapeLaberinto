@@ -21,4 +21,9 @@ public:
 	sf::FloatRect getBounds() const override;
 	void addVelocity(float velocity);
 	void restartVelocity();
+	//METODOS PARA GUARDAR Y CARGAR
+	sf::Vector2f getVelocity() const;
+	sf::Vector2f getPosition() const;     
+	void setVelocity(float velX, float velY);
+	void setPosition(float x, float y);
 };

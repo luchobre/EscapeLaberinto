@@ -28,3 +28,15 @@ sf::FloatRect Item::getBounds() const
 {
     return _sprite.getGlobalBounds();
 }
+//PARA GUARDAR Y CARGAR
+sf::Vector2f Item::getPosition() const {
+    return _sprite.getPosition(); 
+}
+
+void Item::setPosition(float x, float y) {
+    _sprite.setPosition(x, y); 
+}
+
+sf::Sprite& Item::getSprite() {
+    return _sprite; 
+}

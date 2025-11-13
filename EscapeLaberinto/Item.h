@@ -12,6 +12,10 @@ public:
 	void draw(sf::RenderTarget& target, sf::RenderStates states)const override;
 	void respawn();
 	sf::FloatRect getBounds() const override;
+	//PARA GUARDAR Y CARGAR
+	sf::Vector2f getPosition() const; 
+	void setPosition(float x, float y);
+	sf::Sprite& getSprite();           
 };
 
 

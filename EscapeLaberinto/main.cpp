@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS //PARA QUE VISUAL STUDIO TRABAJE BIEN CON LAS FUNCIONES DE ARCHIVO Y NO DE ERROR DE SEGURIDAD
 #include <SFML/Graphics.hpp>
 #include <cstdlib>
 #include <iostream>
@@ -10,6 +11,64 @@
 #include "ItemPowerUp.h"
 #include "Laberinto.h"
 #include "Menu.h"
+#include "GuardarPartida.h"
+#include "ArchivoPartida.h"
+
+//VER SI ANDA BIEN ACA, SINO CAMBIARLO
+ArchivoPartida archivoPartidas("partida_guardada.dat");
+
+bool guardarPartidaActual(Personaje& guerrero, Enemigo& monstruo, Item& item,
+    ItemPowerUp& itemPu, int puntos, int muertes, int timer, bool gameover) {
+
+    GuardarPartida partida;
+
+    //DATOS DEL JUEGO
+    sf::Vector2f posPj = guerrero.getPosition();
+    sf::Vector2f velPj = guerrero.getVelocity();
+    partida.setDatosPersonaje(posPj.x, posPj.y, velPj.x, velPj.y);
+
+    sf::Vector2f posEnemigo = monstruo.getPosition();
+    sf::Vector2f dirEnemigo = monstruo.getDireccion();
+    float velEnemigo = monstruo.getVelocidad();
+    partida.setDatosEnemigo(posEnemigo.x, posEnemigo.y, dirEnemigo.x, dirEnemigo.y, velEnemigo);
+
+
+    sf::Vector2f posItem = item.getPosition();
+    partida.setDatosItemNormal(posItem.x, posItem.y);
+
+    sf::Vector2f posItemPu = itemPu.getPosition();
+    partida.setDatosItemPowerUp(posItemPu.x, posItemPu.y);
+
+    partida.setEstadoJuego(puntos, muertes, timer, gameover);
+
+    return archivoPartidas.guardarPartida(partida);
+}
+
+void cargarPartidaGuardada(Personaje& guerrero, Enemigo& monstruo, Item& item,
+    ItemPowerUp& itemPu, int& puntos, int& muertes, int& timer, bool& gameover) {
+
+    GuardarPartida partida = archivoPartidas.cargarPartida();
+
+    float x, y, velX, velY, dirX, dirY, velocidad;
+
+    partida.getDatosPersonaje(x, y, velX, velY);
+    guerrero.setPosition(x, y);
+    guerrero.setVelocity(velX, velY);
+
+    partida.getDatosEnemigo(x, y, dirX, dirY, velocidad);
+    monstruo.setPosition(x, y);
+    monstruo.setDireccion(dirX, dirY);
+    monstruo.setVelocidad(velocidad);
+
+    partida.getDatosItemNormal(x, y);
+    item.setPosition(x, y);
+
+    partida.getDatosItemPowerUp(x, y);
+    itemPu.setPosition(x, y);
+
+    partida.getEstadoJuego(puntos, muertes, timer, gameover);
+}
+
 
 int main()
 {
@@ -126,7 +185,9 @@ int main()
     Laberinto laberinto;
     if (!laberinto.load("tileset1.png", { 32, 32 }, level.data(), 25, 20))
         return -1;
+   
 
+   
     while (window.isOpen())
     {
         sf::Event event;
@@ -146,9 +207,33 @@ int main()
                     else if (event.key.code == sf::Keyboard::Enter)
                     {
                         int opcion = menu.GetPressedItem();
-                        if (opcion == 0) estado = EN_JUEGO;
-                        else if (opcion == 1) estado = EN_CREDITOS;
-                        else if (opcion == 2) window.close();
+                        if (opcion == 0) {
+                            // FALTA MODIFICAR OPCIONES PARA VER SI QUERES CONTINUAR O INICIAR UNA NUEVA
+                            if (archivoPartidas.existePartidaGuardada()) {
+                                // CARGAR PARTIDA EXISTENTE
+                                cargarPartidaGuardada(guerrero, monstruo, item, itemPu, puntos, muertes, timer, gameover);
+                                estado = EN_JUEGO;
+                                std::cout << "Partida cargada exitosamente!" << std::endl; //MJ EN CONSOLA PARA VER SI FUNCIONA
+                            }
+                            else {
+                                // NUEVA PARTIDA - RESETEAR EL JUEGO A ESTADO INICIAL
+                                archivoPartidas.eliminarPartidaGuardada();
+                                
+                                guerrero.respawnPj();
+                                monstruo = Enemigo();
+                                item.respawn();
+                                itemPu.respawn();
+                                puntos = 0;
+                                muertes = 0;
+                                timer = 60 * 5;
+                                gameover = false;
+                                estado = EN_JUEGO;
+                            }
+                        }
+                        else if (opcion == 1)
+                            estado = EN_CREDITOS;
+                        else if (opcion == 2)
+                            window.close();
                     }
                 }
             }
@@ -171,14 +256,22 @@ int main()
                         if (opcion == 0) {
                             estado = EN_JUEGO;
                         }
-                        else if (opcion == 1) {                    
+                        else if (opcion == 1) {  // NUEVA OPCIÓN: GUARDAR PARTIDA
+                            if (guardarPartidaActual(guerrero, monstruo, item, itemPu, puntos, muertes, timer, gameover)) {
+                                std::cout << "Partida guardada exitosamente!" << std::endl;
+                            }
+                            else {
+                                std::cout << "Error al guardar la partida" << std::endl;
+                            }
+                        }
+                        else if (opcion == 2) {
                             estado = EN_JUEGO;
                             muertes = 0;
                             puntos = 0;
                             guerrero.respawnPj();
                             gameover = false;
                         }
-                        else if (opcion == 2) {                    
+                        else if (opcion == 3) {
                             estado = EN_MENU;
                             muertes = 0;
                             puntos = 0;
@@ -187,10 +280,9 @@ int main()
                         }
                     }
                     else if (event.key.code == sf::Keyboard::Escape) {
-                        estado = EN_JUEGO;  // PARA PODER VOLVER AL JUEGO CON ESC
+                        estado = EN_JUEGO;
                     }
                 }
-                
             }
             else if (estado == EN_JUEGO && gameover) {
                 if (event.type == sf::Event::KeyPressed) {
