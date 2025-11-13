@@ -6,6 +6,7 @@
 #include <array>
 #include "Personaje.h"
 #include "Enemigo.h"
+#include "Enemigo2.h"
 #include "Item.h"
 #include "Colisionable.h"
 #include "ItemPowerUp.h"
@@ -151,6 +152,7 @@ int main()
 
     Personaje guerrero;
     Enemigo monstruo;
+    Enemigo2 monstruo2;
     Item item;
     item.respawn();
 
@@ -170,8 +172,8 @@ int main()
         3,0,3,0,0,0,3,0,0,0,3,0,0,0,3,0,0,3,0,3,0,0,0,0,3,
         3,0,3,3,3,0,3,0,4,0,3,3,3,0,3,0,3,4,0,3,0,3,3,0,3,
         3,0,0,0,3,0,3,0,3,0,0,0,0,0,3,0,0,0,0,3,0,0,3,0,3,
-        3,3,3,0,3,0,3,0,3,3,3,3,3,0,3,0,3,3,3,3,0,3,3,0,3,
-        3,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,3,0,3,
+        3,3,3,0,3,0,3,0,3,3,0,0,0,0,3,0,3,3,3,3,0,3,3,0,3,
+        3,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,3,3,3,
         3,0,3,3,3,3,3,3,3,3,3,0,3,3,3,3,3,3,3,3,3,0,3,0,3,
         3,0,0,0,0,0,0,0,2,2,1,0,1,2,2,0,0,0,0,0,0,0,3,0,3,
         3,0,3,3,3,3,3,0,2,1,1,0,1,1,2,0,3,3,3,3,3,0,3,0,3,
@@ -386,6 +388,15 @@ int main()
                         gameover = true;
                 }
 
+                if (guerrero.isColisionable(monstruo2)) {
+                    guerrero.respawnPj();
+                    puntos = 0;
+                    guerrero.restartVelocity();
+                    muertes++;
+                    if (muertes >= 3)
+                        gameover = true;
+                }
+
                 if (timer == 0 && guerrero.isColisionable(itemPu)) {
                     guerrero.addVelocity(1);
                     timer = 60 * 5;
@@ -400,6 +411,7 @@ int main()
                 window.draw(laberinto);
                 window.draw(guerrero);
                 window.draw(monstruo);
+                window.draw(monstruo2);
                 window.draw(item);
                 window.draw(text);
 
@@ -426,6 +438,7 @@ int main()
             window.draw(laberinto);
             window.draw(guerrero);
             window.draw(monstruo);
+            window.draw(monstruo2);
             window.draw(item);
             window.draw(text);
 

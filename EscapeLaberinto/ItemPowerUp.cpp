@@ -3,7 +3,7 @@
 
 ItemPowerUp::ItemPowerUp()
 {
-    _texture.loadFromFile("yodaIcon.png");
+    _texture.loadFromFile("pulight.png");
     _sprite.setTexture(_texture);
 }
 
