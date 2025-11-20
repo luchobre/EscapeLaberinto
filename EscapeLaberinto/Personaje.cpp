@@ -10,8 +10,6 @@ Personaje::Personaje()
     sf::FloatRect bounds = _sprite.getLocalBounds();
     _sprite.setOrigin(bounds.width / 2, bounds.height / 2);
 
-
-
     _resIzqX = 0;
     _resDerX = 800;
     _resSupY = 0;
@@ -20,7 +18,6 @@ Personaje::Personaje()
 
 void Personaje::update(const Laberinto& laberinto)
 {
-
     sf::Vector2f velocity = { 0,0 };
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
@@ -28,7 +25,7 @@ void Personaje::update(const Laberinto& laberinto)
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) {
-            velocity.y = _velocity.y;
+        velocity.y = _velocity.y;
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
@@ -73,9 +70,6 @@ void Personaje::update(const Laberinto& laberinto)
 
     if (_sprite.getPosition().y > _resInfY - _sprite.getGlobalBounds().height / 2)
         _sprite.setPosition(_sprite.getPosition().x, _resInfY - _sprite.getGlobalBounds().height / 2);
-
-
-
 }
 
 void Personaje::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -105,7 +99,7 @@ sf::FloatRect Personaje::getBounds() const
     return _sprite.getGlobalBounds();
 }
 
-//PARA GUARDAR Y CARGAR
+// PARA GUARDAR Y CARGAR
 sf::Vector2f Personaje::getVelocity() const {
     return _velocity;
 }
@@ -121,4 +115,26 @@ void Personaje::setVelocity(float velX, float velY) {
 
 void Personaje::setPosition(float x, float y) {
     _sprite.setPosition(x, y);
+}
+
+// SISTEMA DE NIVELES
+void Personaje::recolectarItem(int valorItem)
+{
+    nivel.agregarPuntos(valorItem);
+
+    _subioNivel = false;
+
+    if (nivel.checkSubirNivel()) {
+        _subioNivel = true;
+    }
+}
+
+bool Personaje::subioNivel()
+{
+    return _subioNivel;
+}
+
+int Personaje::getNivelActual() const
+{
+    return nivel.getNivelActual();
 }

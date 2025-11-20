@@ -115,7 +115,7 @@ void Menu::drawPausa(sf::RenderWindow& window)
 {
     //RECTANGULO NEGRO SEMITRANSPARENTE PARA QUE SE VEA COOL
     sf::RectangleShape fondo;
-    fondo.setSize(sf::Vector2f(window.getSize().x, window.getSize().y));
+    fondo.setSize(sf::Vector2f(static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y)));
     fondo.setFillColor(sf::Color(0, 0, 0, 150));
     window.draw(fondo);
 
@@ -151,4 +151,4 @@ void Menu::MoveDownPausa()
 int Menu::GetPressedItemPausa()
 {
     return selectedItemIndexPausa;
-}
+};

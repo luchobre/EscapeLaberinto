@@ -1,18 +1,17 @@
 #pragma once
 #include "GuardarPartida.h"
+#include <string>
 
+class ArchivoPartida {
+private:
+    std::string nombreArchivo;
 
-class ArchivoPartida
-{
+public:
+    ArchivoPartida(const std::string& nombre);
 
-    private:
-        char nombreArchivo[30];
+    bool guardarPartida(const GuardarPartida& partida);
+    GuardarPartida cargarPartida();
+    bool existePartidaGuardada() const;
+    void eliminarPartidaGuardada();
+};
 
-    public:
-        ArchivoPartida(const char* nombre = "partida_guardada.dat");
-        bool guardarPartida(GuardarPartida partida);
-        GuardarPartida cargarPartida();
-        
-        bool existePartidaGuardada();
-        bool eliminarPartidaGuardada();
-    };

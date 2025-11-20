@@ -3,7 +3,7 @@
 #include "Colisionable.h"
 #include "Laberinto.h"
 
-class Enemigo :public sf::Drawable, public Colisionable
+class Enemigo : public sf::Drawable, public Colisionable
 {
 	sf::Sprite _sprite;
 	sf::Texture _texture;
