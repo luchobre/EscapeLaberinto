@@ -1,5 +1,5 @@
 #include "Colisionable.h"
 
-bool Colisionable::isColisionable(Colisionable& obj) const {
-	return getBounds().intersects(obj.getBounds());
+bool Colisionable::isColisionable(Colisionable& col) const {
+    return getBounds().intersects(col.getBounds());
 }

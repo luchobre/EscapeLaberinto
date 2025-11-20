@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include "Colisionable.h"
 #include "Laberinto.h"
+#include "Nivel.h"
+
 
 class Personaje :public sf::Drawable, public Colisionable
 {
@@ -13,6 +15,11 @@ class Personaje :public sf::Drawable, public Colisionable
 	int _resDerX;
 	int _resSupY;
 	int _resInfY;
+
+	// --- NUEVO: SISTEMA DE NIVELES ---
+	Nivel nivel;
+	bool _subioNivel = false;
+
 public:
 	Personaje();
 	void update(const Laberinto& laberinto);
@@ -23,7 +30,12 @@ public:
 	void restartVelocity();
 	//METODOS PARA GUARDAR Y CARGAR
 	sf::Vector2f getVelocity() const;
-	sf::Vector2f getPosition() const;     
+	sf::Vector2f getPosition() const;
 	void setVelocity(float velX, float velY);
 	void setPosition(float x, float y);
+
+	// --- NUEVOS MÉTODOS ---
+	void recolectarItem(int valorItem);  // suma puntos y detecta nivel
+	bool subioNivel();                   // para el main
+	int getNivelActual() const;          // devuelve 1, 2 o 3
 };

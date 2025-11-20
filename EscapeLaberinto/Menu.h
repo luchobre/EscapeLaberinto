@@ -1,8 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-#define ITEMS_MENU 4 
-#define ITEMS_MENUPAUSA 4
+constexpr int ITEMS_MENU = 4;
+constexpr int ITEMS_MENUPAUSA = 4;
+
 
 class Menu
 {

@@ -1,50 +1,31 @@
-#define _CRT_SECURE_NO_WARNINGS //PARA QUE VISUAL STUDIO TRABAJE BIEN CON LAS FUNCIONES DE ARCHIVO Y NO DE ERROR DE SEGURIDAD
-#include <iostream>
-#include <cstring>
 #include "ArchivoPartida.h"
+#include <fstream>
+#include <cstdio>
 
-using namespace std;
+ArchivoPartida::ArchivoPartida(const std::string& nombre) : nombreArchivo(nombre) {}
 
-ArchivoPartida::ArchivoPartida(const char* nombre) {
-    strcpy(nombreArchivo, nombre);
+bool ArchivoPartida::guardarPartida(const GuardarPartida& partida) {
+    std::ofstream file(nombreArchivo, std::ios::binary);
+    if (!file.is_open()) return false;
+    file.write(reinterpret_cast<const char*>(&partida), sizeof(GuardarPartida));
+    file.close();
+    return true;
 }
-
-bool ArchivoPartida::guardarPartida(GuardarPartida partida) {
-    FILE* archivo = fopen(nombreArchivo, "wb");
-    if (archivo == nullptr) {
-        cout << "No se pudo abrir el archivo" << endl;
-        return false;
-    }
-    bool exito = fwrite(&partida, sizeof(GuardarPartida), 1, archivo);
-    fclose(archivo);
-
-    return exito;
-}
-
 GuardarPartida ArchivoPartida::cargarPartida() {
     GuardarPartida partida;
-    FILE* archivo = fopen(nombreArchivo, "rb");
-
-    if (archivo == nullptr) {
-        cout << "No se pudo abrir el archivo" << endl;
-        return partida;
+    std::ifstream file(nombreArchivo, std::ios::binary);
+    if (file.is_open()) {
+        file.read(reinterpret_cast<char*>(&partida), sizeof(GuardarPartida));
+        file.close();
     }
-
-    fread(&partida, sizeof(GuardarPartida), 1, archivo);
-    fclose(archivo);
-
     return partida;
 }
 
-bool ArchivoPartida::existePartidaGuardada() {
-    FILE* archivo = fopen(nombreArchivo, "rb");
-    if (archivo == nullptr) {
-        return false;
-    }
-    fclose(archivo);
-    return true;
+bool ArchivoPartida::existePartidaGuardada() const {
+    std::ifstream file(nombreArchivo);
+    return file.good();
 }
 
-bool ArchivoPartida::eliminarPartidaGuardada() {
-    return remove(nombreArchivo) == 0;
+void ArchivoPartida::eliminarPartidaGuardada() {
+    std::remove(nombreArchivo.c_str());
 }

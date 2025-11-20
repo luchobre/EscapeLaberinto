@@ -3,22 +3,28 @@
 #include "Colisionable.h"
 #include "Laberinto.h"
 
-class Enemigo2 :public sf::Drawable, public Colisionable
+class Enemigo2 : public sf::Drawable, public Colisionable
 {
-	sf::Sprite _sprite;
-	sf::Texture _texture;
-	sf::Vector2f _direccion;
-	float _velocidad;
-	int _tileSize;
+    sf::Sprite _sprite;
+    sf::Texture _texture;
+    sf::Vector2f _direccion;
+    float _velocidad;
+    int _tileSize;
 
-	//Resolucion
-	int _resIzqX;
-	int _resDerX;
-	int _resSupY;
-	int _resInfY;
+    // Resolución
+    int _resIzqX;
+    int _resDerX;
+    int _resSupY;
+    int _resInfY;
+
 public:
-	Enemigo2();
-	void draw(sf::RenderTarget& target, sf::RenderStates states)const override;
-	sf::FloatRect getBounds() const override;
+    Enemigo2();
+    void update(const Laberinto& laberinto);
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+    sf::FloatRect getBounds() const override;
+
+    
+    void respawn(const Laberinto& laberinto);
 };
+
 
