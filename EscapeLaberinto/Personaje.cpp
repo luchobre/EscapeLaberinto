@@ -8,7 +8,8 @@ Personaje::Personaje()
     _sprite.setTexture(_texture);
     _sprite.setScale(0.5f, 0.5f);
     sf::FloatRect bounds = _sprite.getLocalBounds();
-    _sprite.setOrigin(_sprite.getGlobalBounds().width, _sprite.getGlobalBounds().height);
+    _sprite.setOrigin(bounds.width / 2, bounds.height / 2);
+
 
 
     _resIzqX = 0;

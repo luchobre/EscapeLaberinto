@@ -27,6 +27,8 @@ public:
 	sf::Vector2f getPosition() const;
 	void setDireccion(float dirX, float dirY); 
 	void setVelocidad(float velocidad);         
-	void setPosition(float x, float y);      
+	void setPosition(float x, float y);   
+	void cambiarDireccion();
+	void respawn(const Laberinto& laberinto);
 };
 

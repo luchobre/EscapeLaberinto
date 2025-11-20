@@ -71,6 +71,7 @@ void cargarPartidaGuardada(Personaje& guerrero, Enemigo& monstruo, Item& item,
 }
 
 
+
 int main()
 {
     int muertes = 0;
@@ -141,7 +142,7 @@ int main()
 
     Menu menu(window.getSize().x, window.getSize().y);
 
-    enum EstadoJuego { EN_MENU, EN_CREDITOS, EN_JUEGO, EN_PAUSA };
+    enum EstadoJuego { EN_MENU, EN_CREDITOS, EN_JUEGO, EN_PAUSA, CARGANDO_PARTIDA };
     EstadoJuego estado = EN_MENU;
 
     sf::Font font;
@@ -153,13 +154,6 @@ int main()
     Personaje guerrero;
     Enemigo monstruo;
     Enemigo2 monstruo2;
-    Item item;
-    item.respawn();
-
-    ItemPowerUp itemPu;
-    itemPu.respawn();
-    int timer = 60 * 5;
-    int puntos = 0;
 
     constexpr std::array level = {
         0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
@@ -180,14 +174,24 @@ int main()
         3,0,3,0,0,0,0,0,2,1,1,0,1,1,2,0,0,0,0,0,3,0,3,0,3,
         3,0,3,0,3,3,3,0,2,2,1,0,1,2,2,0,3,3,3,0,3,0,3,0,3,
         3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
-        3,0,0,0,0,0,3,3,3,3,3,3,3,3,3,0,0,0,0,0,0,0,0,0,3,
+        3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
         3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3
     };
 
     Laberinto laberinto;
     if (!laberinto.load("tileset1.png", { 32, 32 }, level.data(), 25, 20))
         return -1;
-   
+
+    Item item;
+    item.respawn(laberinto);
+
+    ItemPowerUp itemPu;
+    itemPu.respawn(laberinto);
+
+    monstruo.respawn(laberinto);
+
+    int timer = 60 * 5;
+    int puntos = 0;
 
    
     while (window.isOpen())
@@ -210,21 +214,14 @@ int main()
                     {
                         int opcion = menu.GetPressedItem();
                         if (opcion == 0) {
-                            // FALTA MODIFICAR OPCIONES PARA VER SI QUERES CONTINUAR O INICIAR UNA NUEVA
                             if (archivoPartidas.existePartidaGuardada()) {
-                                // CARGAR PARTIDA EXISTENTE
-                                cargarPartidaGuardada(guerrero, monstruo, item, itemPu, puntos, muertes, timer, gameover);
-                                estado = EN_JUEGO;
-                                std::cout << "Partida cargada exitosamente!" << std::endl; //MJ EN CONSOLA PARA VER SI FUNCIONA
+                                estado = CARGANDO_PARTIDA;
                             }
                             else {
-                                // NUEVA PARTIDA - RESETEAR EL JUEGO A ESTADO INICIAL
-                                archivoPartidas.eliminarPartidaGuardada();
-                                
                                 guerrero.respawnPj();
-                                monstruo = Enemigo();
-                                item.respawn();
-                                itemPu.respawn();
+                                monstruo.respawn(laberinto);
+                                item.respawn(laberinto);
+                                itemPu.respawn(laberinto);
                                 puntos = 0;
                                 muertes = 0;
                                 timer = 60 * 5;
@@ -283,6 +280,29 @@ int main()
                     }
                     else if (event.key.code == sf::Keyboard::Escape) {
                         estado = EN_JUEGO;
+                    }
+                }
+            }
+            else if (estado == CARGANDO_PARTIDA) {
+                if (event.type == sf::Event::KeyPressed) {
+                    if (event.key.code == sf::Keyboard::Num1 || event.key.code == sf::Keyboard::N) {
+                        cargarPartidaGuardada(guerrero, monstruo, item, itemPu, puntos, muertes, timer, gameover);
+                        estado = EN_JUEGO;
+                    }
+                    else if (event.key.code == sf::Keyboard::Num2 || event.key.code == sf::Keyboard::M) {
+                        archivoPartidas.eliminarPartidaGuardada();
+                        guerrero.respawnPj();
+                        item.respawn(laberinto);
+                        itemPu.respawn(laberinto);
+                        monstruo.respawn(laberinto);
+                        puntos = 0;
+                        muertes = 0;
+                        timer = 60 * 5;
+                        gameover = false;
+                        estado = EN_JUEGO;
+                    }
+                    else if (event.key.code == sf::Keyboard::Escape) {
+                        estado = EN_MENU;
                     }
                 }
             }
@@ -360,7 +380,7 @@ int main()
             else
             {
                 // VERIFICAR SI SE PRESIONA ESC PARA PAUSAR  NUEVO
-                static bool escPresionado = false; 
+                static bool escPresionado = false;
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && !escPresionado) {
                     estado = EN_PAUSA;
                     escPresionado = true;
@@ -368,14 +388,14 @@ int main()
                 if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
                     escPresionado = false;
                 }
-            
+
                 if (timer > 0) timer--;
 
                 guerrero.update(laberinto);
                 monstruo.update(laberinto);
 
                 if (guerrero.isColisionable(item)) {
-                    item.respawn();
+                    item.respawn(laberinto);
                     puntos++;
                 }
 
@@ -400,7 +420,7 @@ int main()
                 if (timer == 0 && guerrero.isColisionable(itemPu)) {
                     guerrero.addVelocity(1);
                     timer = 60 * 5;
-                    itemPu.respawn();
+                    itemPu.respawn(laberinto);
                 }
 
                 text.setString("Puntaje: " + std::to_string(puntos));
@@ -417,15 +437,15 @@ int main()
 
                 // --- Muestra corazones 
                 for (int i = 0; i < 3; i++) {
-                    if (i < 3 - muertes) 
+                    if (i < 3 - muertes)
 
                         corazones[i].setTexture(texCorazonLleno);
-                        
-                    else 
-                        corazones[i].setTexture(texCorazonVacio);
-                        
 
-                        window.draw(corazones[i]);
+                    else
+                        corazones[i].setTexture(texCorazonVacio);
+
+
+                    window.draw(corazones[i]);
                 };
 
                 if (timer == 0)
@@ -448,7 +468,23 @@ int main()
             menu.drawPausa(window); //MENU DE PAUSA ENCIMA
         }
 
-            
+        else if (estado == CARGANDO_PARTIDA) {
+            menu.draw(window);
+
+            sf::RectangleShape fondoEmergente(sf::Vector2f(500, 250));
+            fondoEmergente.setFillColor(sf::Color(0, 0, 0, 220));
+            fondoEmergente.setPosition(150, 180);
+            window.draw(fondoEmergente);
+
+            sf::Text mensaje;
+            mensaje.setFont(font);
+            mensaje.setString("Partida guardada encontrada\n\n\n[1] Continuar partida guardada\n\n[2] Iniciar nueva partida\n\n[ESC] Volver al menu");
+            mensaje.setCharacterSize(18);
+            mensaje.setFillColor(sf::Color::White);
+            mensaje.setPosition(170, 220);
+            window.draw(mensaje);
+        }
+
         else if (estado == EN_CREDITOS)
         {
             menu.drawCreditos(window);

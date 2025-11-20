@@ -85,3 +85,8 @@ void Laberinto::draw(sf::RenderTarget& target, sf::RenderStates states) const
     target.draw(m_vertices, states);
 }
 
+int Laberinto::getTile(unsigned int row, unsigned int col) const
+{
+    return m_tiles[row * m_width + col];
+}
+

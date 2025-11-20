@@ -9,12 +9,14 @@ public:
 
     //para caminar solo sobre el pasto
     bool esCaminable(sf::FloatRect bounds, sf::Vector2u tileSize) const;
-
+    unsigned int getWidth() const { return m_width; }
+    unsigned int getHeight() const { return m_height; }
     sf::Vector2u getTileSize() const;
-  
+    int getTile(unsigned int row, unsigned int col) const;
+
 private:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-
+       
     sf::VertexArray m_vertices;
     sf::Texture m_tileset;
 

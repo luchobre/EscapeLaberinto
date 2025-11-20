@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-#define ITEMS_MENU 3 
+#define ITEMS_MENU 4 
 #define ITEMS_MENUPAUSA 4
 
 class Menu

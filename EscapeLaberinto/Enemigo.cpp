@@ -1,89 +1,99 @@
 #include "Enemigo.h"
 #include <cstdlib>
 #include <ctime>
+#include <iostream>
+#include "Laberinto.h"
 
 Enemigo::Enemigo()
 {
     _texture.loadFromFile("swish_crocman.png");
     _sprite.setTexture(_texture);
-    _sprite.setScale(0.8f, 0.8f);
-    _sprite.setPosition(740.f, 500.f);
-    
+    _sprite.setScale(0.7f, 0.7f);
+
+    sf::FloatRect bounds = _sprite.getLocalBounds();
+    _sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+
     _velocidad = 3.3f;
-    _tileSize = 32;
+    _velocidad = 3.3f;
+
     _resIzqX = 0;
     _resDerX = 800;
     _resSupY = 0;
     _resInfY = 600;
 
     std::srand(static_cast<unsigned>(std::time(nullptr)));
-    
-    int dir = std::rand() % 4;
-    if (dir == 0) {
-        _direccion = { 1,0 };
-    }
-    else if (dir == 1) {
-        _direccion = { -1,0 };
-    }
-    else if (dir == 2) {
-        _direccion = { 0,1 };
-    }
-    else {
-        _direccion = { 0,-1 };
-    }
 
+    cambiarDireccion(); 
 }
 
 
 void Enemigo::update(const Laberinto& laberinto)
 {
+    float halfW = _sprite.getGlobalBounds().width / 2.f;
+    float halfH = _sprite.getGlobalBounds().height / 2.f;
 
-    sf::Vector2f nuevaPosicion = _sprite.getPosition() + _direccion * _velocidad;
+    sf::Vector2f posActual = _sprite.getPosition();
+    sf::Vector2f nuevaPos = posActual + _direccion * _velocidad;
 
-    if (nuevaPosicion.x< _resIzqX || nuevaPosicion.y < _resSupY || nuevaPosicion.x + _sprite.getGlobalBounds().width > _resDerX || nuevaPosicion.y + _sprite.getGlobalBounds().height > _resInfY) {
-        int nuevaDir = std::rand() % 4;
-        if (nuevaDir == 0) {
-            _direccion = { 1,0 };
-        }
-        else if (nuevaDir == 1) {
-            _direccion = { -1,0 };
-        }
-        else if (nuevaDir == 2) {
-            _direccion = { 0,1 };
-        }
-        else {
-            _direccion = { 0,-1 };
-        }
+    if (nuevaPos.x - halfW < _resIzqX ||
+        nuevaPos.x + halfW > _resDerX ||
+        nuevaPos.y - halfH < _resSupY ||
+        nuevaPos.y + halfH > _resInfY)
+    {
+        cambiarDireccion();
+        return;
     }
 
+    sf::FloatRect bounds;
+    bounds.left = nuevaPos.x - halfW;
+    bounds.top = nuevaPos.y - halfH;
+    bounds.width = halfW * 2.f;
+    bounds.height = halfH * 2.f;
 
-    sf::FloatRect bounds = _sprite.getGlobalBounds();
-    bounds.left = nuevaPosicion.x;
-    bounds.top = nuevaPosicion.y;
+    bool puede = laberinto.esCaminable(bounds, laberinto.getTileSize());
 
-    bool puedeMoverse = laberinto.esCaminable(bounds, sf::Vector2u(_tileSize, _tileSize));
-   
-    if (puedeMoverse) {
-        _sprite.setPosition(nuevaPosicion);
+    if (puede)
+        _sprite.setPosition(nuevaPos);
+    else
+        cambiarDireccion();
+}
+
+void Enemigo::cambiarDireccion()
+{
+    int d = std::rand() % 4;
+
+    switch (d)
+    {
+    case 0: _direccion = { 1, 0 }; break;
+    case 1: _direccion = { -1, 0 }; break;
+    case 2: _direccion = { 0, 1 }; break;
+    case 3: _direccion = { 0, -1 }; break;
     }
-    else {
-        int nuevaDir = std::rand() % 4;
-        if (nuevaDir == 0) {
-            _direccion = { 1,0 };
-        }
-        else if (nuevaDir == 1) {
-            _direccion = { -1,0 };
-        }
-        else if (nuevaDir == 2) {
-            _direccion = { 0,1 };
-        }
-        else {
-            _direccion = { 0,-1 };
-        }
+}
 
+
+void Enemigo::respawn(const Laberinto& laberinto)
+{
+    sf::Vector2u tileSize = laberinto.getTileSize();
+    unsigned int w = laberinto.getWidth();
+    unsigned int h = laberinto.getHeight();
+
+    while (true)
+    {
+        int col = std::rand() % w;
+        int row = std::rand() % h;
+
+        int tile = laberinto.getTile(row, col);
+
+        if (tile == 0) {
+            float x = col * tileSize.x + tileSize.x / 2;
+            float y = row * tileSize.y + tileSize.y / 2;
+            _sprite.setPosition(x, y);
+            return;
+        }
     }
- 
-}   
+}
+
 
 void Enemigo::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
@@ -95,29 +105,10 @@ sf::FloatRect Enemigo::getBounds() const
     return _sprite.getGlobalBounds();
 }
 
-//PARA GUARDAR Y CARGAR
-sf::Vector2f Enemigo::getDireccion() const {
-    return _direccion;
-}
+sf::Vector2f Enemigo::getDireccion() const { return _direccion; }
+float Enemigo::getVelocidad() const { return _velocidad; }
+sf::Vector2f Enemigo::getPosition() const { return _sprite.getPosition(); }
 
-float Enemigo::getVelocidad() const {
-    return _velocidad;
-}
-
-sf::Vector2f Enemigo::getPosition() const {
-    return _sprite.getPosition();
-}
-
-void Enemigo::setDireccion(float dirX, float dirY) {
-    _direccion.x = dirX;  
-    _direccion.y = dirY;  
-}
-
-void Enemigo::setVelocidad(float velocidad) {
-    _velocidad = velocidad;
-}
-
-void Enemigo::setPosition(float x, float y) {
-    _sprite.setPosition(x, y);
-}
-
+void Enemigo::setDireccion(float dx, float dy) { _direccion = { dx, dy }; }
+void Enemigo::setVelocidad(float v) { _velocidad = v; }
+void Enemigo::setPosition(float x, float y) { _sprite.setPosition(x, y); }

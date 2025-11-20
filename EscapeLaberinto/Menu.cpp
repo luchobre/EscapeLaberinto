@@ -11,6 +11,11 @@ Menu::Menu(float width, float height)
     //MENÚ PRINCIPAL
     menu[0].setFont(font);
     menu[0].setFillColor(sf::Color::Red);
+    menu[0].setString("Continuar partida");
+    menu[0].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENU + 1) * 1));
+
+    menu[0].setFont(font);
+    menu[0].setFillColor(sf::Color::Red);
     menu[0].setString("Jugar");
     menu[0].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENU + 1) * 1));
 
@@ -34,17 +39,17 @@ Menu::Menu(float width, float height)
 
     menuPausa[1].setFont(font);
     menuPausa[1].setFillColor(sf::Color::White);
-    menuPausa[1].setString("Guardar Partida");  
+    menuPausa[1].setString("Guardar Partida");
     menuPausa[1].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENUPAUSA + 1) * 2));
 
     menuPausa[2].setFont(font);
     menuPausa[2].setFillColor(sf::Color::White);
-    menuPausa[2].setString("Reiniciar partida"); 
+    menuPausa[2].setString("Reiniciar partida");
     menuPausa[2].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENUPAUSA + 1) * 3));
 
     menuPausa[3].setFont(font);
     menuPausa[3].setFillColor(sf::Color::White);
-    menuPausa[3].setString("Salir al menu principal"); 
+    menuPausa[3].setString("Salir al menu principal");
     menuPausa[3].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENUPAUSA + 1) * 4));
 
 
@@ -53,7 +58,7 @@ Menu::Menu(float width, float height)
     //CRÉDITOS
     contenidoCreditos.setFont(font);
     contenidoCreditos.setCharacterSize(50);   // tamaño más grande
-    contenidoCreditos.setFillColor(sf::Color::Green );
+    contenidoCreditos.setFillColor(sf::Color::Green);
     contenidoCreditos.setString("Grupo 9 de Programacion 2\nUTN FRGP");
     contenidoCreditos.setPosition(width / 2 - 250.f, height / 2 - 100.f);
 
