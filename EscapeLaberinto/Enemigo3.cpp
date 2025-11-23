@@ -1,20 +1,20 @@
-#include "Enemigo.h"
+#include "Enemigo3.h"
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
 #include "Laberinto.h"
 
-Enemigo::Enemigo()
+Enemigo3::Enemigo3()
 {
-    _texture.loadFromFile("swish_crocman.png");
+    _texture.loadFromFile("rastreador.png");
     _sprite.setTexture(_texture);
     _sprite.setScale(0.7f, 0.7f);
 
     sf::FloatRect bounds = _sprite.getLocalBounds();
     _sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 
-    _velocidad = 1.3f;
-    _velocidad = 1.3f;
+    _velocidad = 3.3f;
+    _velocidad = 3.3f;
 
     _resIzqX = 0;
     _resDerX = 800;
@@ -23,11 +23,11 @@ Enemigo::Enemigo()
 
     std::srand(static_cast<unsigned>(std::time(nullptr)));
 
-    cambiarDireccion(); 
+    cambiarDireccion();
 }
 
 
-void Enemigo::update(const Laberinto& laberinto)
+void Enemigo3::update(const Laberinto& laberinto)
 {
     float halfW = _sprite.getGlobalBounds().width / 2.f;
     float halfH = _sprite.getGlobalBounds().height / 2.f;
@@ -58,7 +58,7 @@ void Enemigo::update(const Laberinto& laberinto)
         cambiarDireccion();
 }
 
-void Enemigo::cambiarDireccion()
+void Enemigo3::cambiarDireccion()
 {
     int d = std::rand() % 4;
 
@@ -72,7 +72,7 @@ void Enemigo::cambiarDireccion()
 }
 
 
-void Enemigo::respawn(const Laberinto& laberinto)
+void Enemigo3::respawn(const Laberinto& laberinto)
 {
     sf::Vector2u tileSize = laberinto.getTileSize();
     unsigned int w = laberinto.getWidth();
@@ -95,20 +95,20 @@ void Enemigo::respawn(const Laberinto& laberinto)
 }
 
 
-void Enemigo::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void Enemigo3::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     target.draw(_sprite, states);
 }
 
-sf::FloatRect Enemigo::getBounds() const
+sf::FloatRect Enemigo3::getBounds() const
 {
     return _sprite.getGlobalBounds();
 }
 
-sf::Vector2f Enemigo::getDireccion() const { return _direccion; }
-float Enemigo::getVelocidad() const { return _velocidad; }
-sf::Vector2f Enemigo::getPosition() const { return _sprite.getPosition(); }
+sf::Vector2f Enemigo3::getDireccion() const { return _direccion; }
+float Enemigo3::getVelocidad() const { return _velocidad; }
+sf::Vector2f Enemigo3::getPosition() const { return _sprite.getPosition(); }
 
-void Enemigo::setDireccion(float dx, float dy) { _direccion = { dx, dy }; }
-void Enemigo::setVelocidad(float v) { _velocidad = v; }
-void Enemigo::setPosition(float x, float y) { _sprite.setPosition(x, y); }
+void Enemigo3::setDireccion(float dx, float dy) { _direccion = { dx, dy }; }
+void Enemigo3::setVelocidad(float v) { _velocidad = v; }
+void Enemigo3::setPosition(float x, float y) { _sprite.setPosition(x, y); }

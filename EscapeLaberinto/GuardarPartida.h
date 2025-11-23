@@ -10,6 +10,10 @@ private:
         float enemigoX, enemigoY;
         float enemigoDirX, enemigoDirY; 
         float enemigoVelocidad;
+    //ENEMIGO3
+        float enemigo3X, enemigo3Y;
+        float enemigo3DirX, enemigo3DirY;
+        float enemigo3Velocidad;
     //ITEMS
         float itemX, itemY;           
         float itemPowerUpX, itemPowerUpY; 
@@ -25,6 +29,7 @@ public:
     //SETTERS PARA GUARDAR DATOS EN EL OBJETO DESDE EL JUEGO       
         void setDatosPersonaje(float x, float y, float velX, float velY);
         void setDatosEnemigo(float x, float y, float dirX, float dirY, float vel);
+        void setDatosEnemigo3(float x, float y, float dirX, float dirY, float vel);
         void setDatosItemNormal(float x, float y);
         void setDatosItemPowerUp(float x, float y);
         void setEstadoJuego(int pts, int mts, int timer, bool gameOver);
@@ -32,6 +37,7 @@ public:
     //GETTERS PARA GUARDAR DATOS EN EL OBJETO DESDE EL JUEGO
         void getDatosPersonaje(float& x, float& y, float& velX, float& velY);
         void getDatosEnemigo(float& x, float& y, float& dirX, float& dirY, float& vel);
+        void getDatosEnemigo3(float& x, float& y, float& dirX, float& dirY, float& vel);
         void getDatosItemNormal(float& x, float& y);
         void getDatosItemPowerUp(float& x, float& y);
         void getEstadoJuego(int& pts, int& mts, int& timer, bool& gameOver);

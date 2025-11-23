@@ -14,6 +14,12 @@ GuardarPartida::GuardarPartida() {
     enemigoDirY = 0.0f;
     enemigoVelocidad = 3.3f; 
 
+    enemigo3X = 740.0f;
+    enemigo3Y = 500.0f;
+    enemigo3DirX = 1.0f;
+    enemigo3DirY = 0.0f;
+    enemigo3Velocidad = 3.3f;
+
     itemX = 0.0f;
     itemY = 0.0f;
     itemPowerUpX = 0.0f;
@@ -39,6 +45,14 @@ void GuardarPartida::setDatosEnemigo(float x, float y, float dirX, float dirY, f
     enemigoDirX = dirX;
     enemigoDirY = dirY;
     enemigoVelocidad = vel;
+}
+
+void GuardarPartida::setDatosEnemigo3(float x, float y, float dirX, float dirY, float vel) {
+    enemigo3X = x;
+    enemigo3Y = y;
+    enemigo3DirX = dirX;
+    enemigo3DirY = dirY;
+    enemigo3Velocidad = vel;
 }
 
 void GuardarPartida::setDatosItemNormal(float x, float y) {
@@ -73,6 +87,14 @@ void GuardarPartida::getDatosEnemigo(float& x, float& y, float& dirX, float& dir
     dirX = enemigoDirX;
     dirY = enemigoDirY;
     vel = enemigoVelocidad;
+}
+
+void GuardarPartida::getDatosEnemigo3(float& x, float& y, float& dirX, float& dirY, float& vel) {
+    x = enemigo3X;
+    y = enemigo3Y;
+    dirX = enemigo3DirX;
+    dirY = enemigo3DirY;
+    vel = enemigo3Velocidad;
 }
 
 void GuardarPartida::getDatosItemNormal(float& x, float& y) {

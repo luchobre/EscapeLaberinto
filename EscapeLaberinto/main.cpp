@@ -7,6 +7,7 @@
 #include "Personaje.h"
 #include "Enemigo.h"
 #include "Enemigo2.h"
+#include "Enemigo3.h"
 #include "Item.h"
 #include "Colisionable.h"
 #include "ItemPowerUp.h"
@@ -18,7 +19,7 @@
 //VER SI ANDA BIEN ACA, SINO CAMBIARLO
 ArchivoPartida archivoPartidas("partida_guardada.dat");
 
-bool guardarPartidaActual(Personaje& guerrero, Enemigo& monstruo, Item& item,
+bool guardarPartidaActual(Personaje& guerrero, Enemigo& monstruo, Enemigo3& monstruo3, Item& item,
     ItemPowerUp& itemPu, int puntos, int muertes, int timer, bool gameover) {
 
     GuardarPartida partida;
@@ -33,6 +34,10 @@ bool guardarPartidaActual(Personaje& guerrero, Enemigo& monstruo, Item& item,
     float velEnemigo = monstruo.getVelocidad();
     partida.setDatosEnemigo(posEnemigo.x, posEnemigo.y, dirEnemigo.x, dirEnemigo.y, velEnemigo);
 
+    sf::Vector2f posEnemigo3 = monstruo3.getPosition();
+    sf::Vector2f dirEnemigo3 = monstruo3.getDireccion();
+    float velEnemigo3 = monstruo3.getVelocidad();
+    partida.setDatosEnemigo3(posEnemigo3.x, posEnemigo3.y, dirEnemigo3.x, dirEnemigo3.y, velEnemigo3);
 
     sf::Vector2f posItem = item.getPosition();
     partida.setDatosItemNormal(posItem.x, posItem.y);
@@ -45,7 +50,7 @@ bool guardarPartidaActual(Personaje& guerrero, Enemigo& monstruo, Item& item,
     return archivoPartidas.guardarPartida(partida);
 }
 
-void cargarPartidaGuardada(Personaje& guerrero, Enemigo& monstruo, Item& item,
+void cargarPartidaGuardada(Personaje& guerrero, Enemigo& monstruo, Enemigo3& monstruo3, Item& item,
     ItemPowerUp& itemPu, int& puntos, int& muertes, int& timer, bool& gameover) {
 
     GuardarPartida partida = archivoPartidas.cargarPartida();
@@ -60,6 +65,11 @@ void cargarPartidaGuardada(Personaje& guerrero, Enemigo& monstruo, Item& item,
     monstruo.setPosition(x, y);
     monstruo.setDireccion(dirX, dirY);
     monstruo.setVelocidad(velocidad);
+
+    partida.getDatosEnemigo3(x, y, dirX, dirY, velocidad);
+    monstruo3.setPosition(x, y);
+    monstruo3.setDireccion(dirX, dirY);
+    monstruo3.setVelocidad(velocidad);
 
     partida.getDatosItemNormal(x, y);
     item.setPosition(x, y);
@@ -76,6 +86,7 @@ int main()
 {
     int muertes = 0;
     bool gameover = false;
+    int nivelActual = 1;
 
     std::srand((unsigned)std::time(0));
 
@@ -142,7 +153,7 @@ int main()
 
     Menu menu(window.getSize().x, window.getSize().y);
 
-    enum EstadoJuego { EN_MENU, EN_CREDITOS, EN_JUEGO, EN_PAUSA, CARGANDO_PARTIDA };
+    enum EstadoJuego { EN_MENU, EN_CREDITOS, EN_JUEGO, EN_PAUSA, CARGANDO_PARTIDA, WIN };
     EstadoJuego estado = EN_MENU;
 
     sf::Font font;
@@ -151,11 +162,59 @@ int main()
     sf::Text text;
     text.setFont(font);
 
+
     Personaje guerrero;
     Enemigo monstruo;
     Enemigo2 monstruo2;
+    Enemigo3 monstruo3;
 
-    constexpr std::array level = {
+    constexpr std::array level1 = {
+        3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
+        3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
+        3,0,3,3,3,3,3,0,3,3,3,3,3,0,3,3,3,3,3,3,3,3,0,0,3,
+        3,0,0,0,0,0,3,0,0,0,0,0,3,0,0,0,0,3,0,0,0,3,0,0,3,
+        3,3,3,3,0,0,3,3,3,3,3,0,3,3,3,3,0,3,0,3,0,3,3,0,3,
+        3,0,0,3,0,0,0,0,0,0,3,0,0,0,0,3,0,0,0,3,0,0,3,0,3,
+        3,0,0,3,3,3,3,3,3,0,3,3,3,3,0,3,3,3,0,3,3,0,3,0,3,
+        3,0,0,0,0,0,0,0,3,0,0,0,0,3,0,0,0,3,0,0,0,0,3,0,3,
+        3,0,3,3,3,3,3,0,3,3,3,3,0,3,3,3,0,3,3,3,3,0,3,0,3,
+        3,0,0,0,0,0,3,0,0,0,0,3,0,0,0,3,0,0,0,0,3,0,0,0,3,
+        3,3,3,3,0,0,3,3,3,3,0,0,0,3,0,3,3,3,3,0,3,3,3,0,3,
+        3,0,0,3,0,0,0,0,0,3,0,0,0,3,0,0,0,0,3,0,0,0,3,3,3,
+        3,0,0,3,0,3,3,3,0,3,3,3,0,3,3,3,0,3,3,3,0,3,0,0,3,
+        3,0,0,0,0,0,0,3,0,0,0,3,0,0,0,3,0,0,0,0,0,0,0,0,3,
+        3,3,3,3,3,3,0,3,3,3,0,3,3,3,0,3,3,3,3,3,3,3,3,0,3,
+        3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
+        3,0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,0,3,
+        3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
+        3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
+        3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3
+    };
+
+    constexpr std::array level2 = {
+        3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
+        3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
+        3,0,3,3,3,3,3,0,3,3,3,0,3,3,0,3,3,3,3,3,3,3,0,0,3,
+        3,0,0,0,0,0,3,0,0,0,3,0,3,0,0,0,0,0,0,3,0,3,0,0,3,
+        3,3,3,3,0,0,3,3,3,0,3,0,3,3,3,3,0,3,0,3,0,3,3,0,3,
+        3,0,0,3,0,0,0,0,3,0,0,0,0,0,2,3,0,0,0,3,0,0,3,0,3,
+        3,0,0,3,3,3,3,0,3,3,3,3,3,0,2,3,3,3,0,3,3,0,3,0,3,
+        3,0,0,0,0,0,0,0,3,0,0,0,3,0,1,0,0,3,0,0,0,0,3,0,3,
+        3,0,3,3,3,3,3,0,3,3,3,0,3,0,1,0,3,3,3,3,3,0,3,0,3,
+        3,0,0,0,0,0,3,0,0,0,3,0,0,0,0,0,0,0,0,3,0,0,3,0,3,
+        3,3,3,3,0,0,3,3,3,0,0,0,0,3,0,3,3,3,3,3,0,3,3,0,3,
+        3,0,0,3,0,0,0,0,3,0,0,0,0,3,0,0,0,0,3,0,0,0,3,3,3,
+        3,0,0,3,0,3,3,3,3,0,3,0,3,3,3,3,0,3,3,3,0,3,0,0,3,
+        3,0,0,0,0,0,0,3,0,0,3,0,0,0,0,3,0,0,0,0,0,0,0,0,3,
+        3,3,3,3,3,3,0,3,3,0,3,3,3,3,0,3,3,3,3,3,3,3,3,0,3,
+        3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
+        3,0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,0,3,
+        3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
+        3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
+        3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3
+    };
+
+    constexpr std::array level3 = {
         0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
         0,0,0,0,0,0,3,0,0,0,3,0,0,0,3,0,0,0,0,0,0,0,0,0,3,
         3,0,3,3,3,0,3,0,3,0,4,0,3,0,3,0,3,3,4,3,3,3,0,0,3,
@@ -178,10 +237,18 @@ int main()
         3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3
     };
 
-    Laberinto laberinto;
-    if (!laberinto.load("tileset1.png", { 32, 32 }, level.data(), 25, 20))
-        return -1;
+    constexpr std::array level4 = {
+        0
+    };
 
+    Laberinto laberinto;
+    if (nivelActual == 1)
+        laberinto.load("tileset1.png", { 32,32 }, level1.data(), 25, 20);
+    else if (nivelActual == 2)
+        laberinto.load("tileset1.png", { 32,32 }, level2.data(), 25, 20);
+    else if (nivelActual == 3)
+        laberinto.load("tileset1.png", { 32,32 }, level3.data(), 25, 20);
+   
     Item item;
     item.respawn(laberinto);
 
@@ -189,6 +256,7 @@ int main()
     itemPu.respawn(laberinto);
 
     monstruo.respawn(laberinto);
+    monstruo3.respawn(laberinto);
 
     int timer = 60 * 5;
     int puntos = 0;
@@ -220,6 +288,7 @@ int main()
                             else {
                                 guerrero.respawnPj();
                                 monstruo.respawn(laberinto);
+                                monstruo3.respawn(laberinto);
                                 item.respawn(laberinto);
                                 itemPu.respawn(laberinto);
                                 puntos = 0;
@@ -256,7 +325,7 @@ int main()
                             estado = EN_JUEGO;
                         }
                         else if (opcion == 1) {  // NUEVA OPCIÓN: GUARDAR PARTIDA
-                            if (guardarPartidaActual(guerrero, monstruo, item, itemPu, puntos, muertes, timer, gameover)) {
+                            if (guardarPartidaActual(guerrero, monstruo, monstruo3, item, itemPu, puntos, muertes, timer, gameover)) {
                                 std::cout << "Partida guardada exitosamente!" << std::endl;
                             }
                             else {
@@ -265,16 +334,28 @@ int main()
                         }
                         else if (opcion == 2) {
                             estado = EN_JUEGO;
+                            nivelActual = 1;
+                            laberinto.load("tileset1.png", { 32,32 }, level1.data(), 25, 20);
                             muertes = 0;
                             puntos = 0;
                             guerrero.respawnPj();
+                            item.respawn(laberinto);
+                            itemPu.respawn(laberinto);
+                            monstruo.respawn(laberinto);
+                            monstruo3.respawn(laberinto);
                             gameover = false;
                         }
                         else if (opcion == 3) {
                             estado = EN_MENU;
+                            nivelActual = 1;
+                            laberinto.load("tileset1.png", { 32,32 }, level1.data(), 25, 20);
                             muertes = 0;
                             puntos = 0;
                             guerrero.respawnPj();
+                            item.respawn(laberinto);
+                            itemPu.respawn(laberinto);
+                            monstruo.respawn(laberinto);
+                            monstruo3.respawn(laberinto);
                             gameover = false;
                         }
                     }
@@ -286,7 +367,7 @@ int main()
             else if (estado == CARGANDO_PARTIDA) {
                 if (event.type == sf::Event::KeyPressed) {
                     if (event.key.code == sf::Keyboard::Num1 || event.key.code == sf::Keyboard::N) {
-                        cargarPartidaGuardada(guerrero, monstruo, item, itemPu, puntos, muertes, timer, gameover);
+                        cargarPartidaGuardada(guerrero, monstruo, monstruo3, item, itemPu, puntos, muertes, timer, gameover);
                         estado = EN_JUEGO;
                     }
                     else if (event.key.code == sf::Keyboard::Num2 || event.key.code == sf::Keyboard::M) {
@@ -295,6 +376,7 @@ int main()
                         item.respawn(laberinto);
                         itemPu.respawn(laberinto);
                         monstruo.respawn(laberinto);
+                        monstruo3.respawn(laberinto);
                         puntos = 0;
                         muertes = 0;
                         timer = 60 * 5;
@@ -309,9 +391,15 @@ int main()
             else if (estado == EN_JUEGO && gameover) {
                 if (event.type == sf::Event::KeyPressed) {
                     if (event.key.code == sf::Keyboard::Enter) {
+                        nivelActual = 1;
+                        laberinto.load("tileset1.png", { 32,32 }, level1.data(), 25, 20);
                         muertes = 0;
                         puntos = 0;
                         guerrero.respawnPj();
+                        monstruo.respawn(laberinto);
+                        monstruo3.respawn(laberinto);
+                        item.respawn(laberinto);
+                        itemPu.respawn(laberinto);
                         gameover = false;
                     }
                     else if (event.key.code == sf::Keyboard::Escape) {
@@ -319,6 +407,10 @@ int main()
                         muertes = 0;
                         puntos = 0;
                         guerrero.respawnPj();
+                        monstruo.respawn(laberinto);
+                        monstruo3.respawn(laberinto);
+                        item.respawn(laberinto);
+                        itemPu.respawn(laberinto);
                         gameover = false;
                     }
                 }
@@ -362,17 +454,29 @@ int main()
                 if (event.type == sf::Event::KeyPressed) {
                     if (event.key.code == sf::Keyboard::Enter) {
                         // reinicia el juego
+                        nivelActual = 1;
+                        laberinto.load("tileset1.png", { 32,32 }, level1.data(), 25, 20);
                         muertes = 0;
                         puntos = 0;
                         guerrero.respawnPj();
+                        monstruo.respawn(laberinto);
+                        monstruo3.respawn(laberinto);
+                        item.respawn(laberinto);
+                        itemPu.respawn(laberinto);
                         gameover = false;
                     }
                     else if (event.key.code == sf::Keyboard::Escape) {
                         // vuelve al menu
                         estado = EN_MENU;
+                        nivelActual = 1;
+                        laberinto.load("tileset1.png", { 32,32 }, level1.data(), 25, 20);
                         muertes = 0;
                         puntos = 0;
                         guerrero.respawnPj();
+                        monstruo.respawn(laberinto);
+                        monstruo3.respawn(laberinto);
+                        item.respawn(laberinto);
+                        itemPu.respawn(laberinto);
                         gameover = false;
                     }
                 }
@@ -393,15 +497,43 @@ int main()
 
                 guerrero.update(laberinto);
                 monstruo.update(laberinto);
+                monstruo3.update(laberinto);
 
                 if (guerrero.isColisionable(item)) {
                     item.respawn(laberinto);
                     puntos++;
+
+                    // --- Cambio de nivel correcto ---
+                    if (puntos >= 1 && nivelActual == 1) {
+                        nivelActual = 2;
+                        laberinto.load("tileset1.png", { 32,32 }, level2.data(), 25, 20);
+                        guerrero.respawnPj();
+                        monstruo.respawn(laberinto);
+                        monstruo3.respawn(laberinto);
+                        item.respawn(laberinto);
+                        itemPu.respawn(laberinto);
+
+                        std::cout << "Nivel 2 cargado!" << std::endl;
+                    }
+                    else if (puntos >= 2 && nivelActual == 2) {
+                        nivelActual = 3;
+                        laberinto.load("tileset1.png", { 32,32 }, level3.data(), 25, 20);
+                        guerrero.respawnPj();
+                        monstruo.respawn(laberinto);
+                        monstruo3.respawn(laberinto);
+                        item.respawn(laberinto);
+                        itemPu.respawn(laberinto);
+
+                        std::cout << "Nivel 3 cargado!" << std::endl;
+                    }
+                    else if (puntos == 3 && nivelActual == 3) {
+                        estado = WIN;
+                    }
                 }
 
                 if (guerrero.isColisionable(monstruo)) {
                     guerrero.respawnPj();
-                    puntos = 0;
+                    //puntos = 0;
                     guerrero.restartVelocity();
                     muertes++;
                     if (muertes >= 3)
@@ -410,7 +542,16 @@ int main()
 
                 if (guerrero.isColisionable(monstruo2)) {
                     guerrero.respawnPj();
-                    puntos = 0;
+                    //puntos = 0;
+                    guerrero.restartVelocity();
+                    muertes++;
+                    if (muertes >= 3)
+                        gameover = true;
+                }
+
+                if (guerrero.isColisionable(monstruo3)) {
+                    guerrero.respawnPj();
+                    //puntos = 0;
                     guerrero.restartVelocity();
                     muertes++;
                     if (muertes >= 3)
@@ -432,6 +573,7 @@ int main()
                 window.draw(guerrero);
                 window.draw(monstruo);
                 window.draw(monstruo2);
+                window.draw(monstruo3);
                 window.draw(item);
                 window.draw(text);
 
@@ -459,6 +601,7 @@ int main()
             window.draw(guerrero);
             window.draw(monstruo);
             window.draw(monstruo2);
+            window.draw(monstruo3);
             window.draw(item);
             window.draw(text);
 
@@ -489,7 +632,27 @@ int main()
         {
             menu.drawCreditos(window);
         }
+        else if (estado == WIN)
+        {
+            static sf::Texture texWin;
+            static bool cargada = false;
+            if (!cargada) {
+                if (!texWin.loadFromFile("youwin.png")) {
+                    std::cout << "Error cargando youwin.png";
+                }
+                cargada = true;
+            }
 
+            sf::Sprite winSprite(texWin);
+            winSprite.setPosition(0, 0);
+            window.draw(winSprite);
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
+                puntos = 0;
+                nivelActual = 1;
+                estado = EN_MENU;
+            }
+                    }
         window.display();
     }
 

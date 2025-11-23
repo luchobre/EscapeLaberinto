@@ -11,7 +11,6 @@ Personaje::Personaje()
     _sprite.setOrigin(bounds.width / 2, bounds.height / 2);
 
 
-
     _resIzqX = 0;
     _resDerX = 800;
     _resSupY = 0;
@@ -73,8 +72,6 @@ void Personaje::update(const Laberinto& laberinto)
 
     if (_sprite.getPosition().y > _resInfY - _sprite.getGlobalBounds().height / 2)
         _sprite.setPosition(_sprite.getPosition().x, _resInfY - _sprite.getGlobalBounds().height / 2);
-
-
 
 }
 
