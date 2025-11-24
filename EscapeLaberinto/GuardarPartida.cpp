@@ -1,7 +1,7 @@
 #include "GuardarPartida.h"
 
 GuardarPartida::GuardarPartida() {
-    //VALORES "POR DEFECTO" PARA EVITAR BASURA
+    //VALORES POR DEFECTO PARA EVITAR BASURA
     pjX = 50.0f;
     pjY = 50.0f;
     pjVelocidadX = 2.0f;  
@@ -13,6 +13,9 @@ GuardarPartida::GuardarPartida() {
     enemigoDirX = 1.0f;  
     enemigoDirY = 0.0f;
     enemigoVelocidad = 3.3f; 
+
+    enemigo2X = 350.0f; 
+    enemigo2Y = 320.0f;;
 
     enemigo3X = 740.0f;
     enemigo3Y = 500.0f;
@@ -26,6 +29,7 @@ GuardarPartida::GuardarPartida() {
     itemPowerUpY = 0.0f;
 
     puntuacion = 0;
+    nivelActual = 1;
     muertes = 0;
     timerPowerUp = 60 * 5;
     gameOver = false;
@@ -45,6 +49,11 @@ void GuardarPartida::setDatosEnemigo(float x, float y, float dirX, float dirY, f
     enemigoDirX = dirX;
     enemigoDirY = dirY;
     enemigoVelocidad = vel;
+}
+
+void GuardarPartida::setDatosEnemigo2(float x, float y) {
+    enemigo2X = x;
+    enemigo2Y = y;
 }
 
 void GuardarPartida::setDatosEnemigo3(float x, float y, float dirX, float dirY, float vel) {
@@ -72,6 +81,11 @@ void GuardarPartida::setEstadoJuego(int pts, int mts, int timer, bool go) {
     gameOver = go;
 }
 
+void GuardarPartida::setNivelActual(int nivel) {
+    nivelActual = nivel;
+}
+
+
 //GETTERS PARA DARLE LOS DATOS A LOS OBJETOS DEL JUEGO
 
 void GuardarPartida::getDatosPersonaje(float& x, float& y, float& velX, float& velY) {
@@ -87,6 +101,11 @@ void GuardarPartida::getDatosEnemigo(float& x, float& y, float& dirX, float& dir
     dirX = enemigoDirX;
     dirY = enemigoDirY;
     vel = enemigoVelocidad;
+}
+
+void GuardarPartida::getDatosEnemigo2(float& x, float& y) {
+    x = enemigo2X;
+    y = enemigo2Y;
 }
 
 void GuardarPartida::getDatosEnemigo3(float& x, float& y, float& dirX, float& dirY, float& vel) {
@@ -113,3 +132,8 @@ void GuardarPartida::getEstadoJuego(int& pts, int& mts, int& timer, bool& go) {
     timer = timerPowerUp;
     go = gameOver;
 }
+
+int GuardarPartida::getNivelActual() {
+    return nivelActual;
+}
+

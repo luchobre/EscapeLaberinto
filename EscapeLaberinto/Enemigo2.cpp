@@ -26,3 +26,10 @@ sf::FloatRect Enemigo2::getBounds() const
     return _sprite.getGlobalBounds();
 }
 
+sf::Vector2f Enemigo2::getPosition() const {
+    return _sprite.getPosition();
+}
+
+void Enemigo2::setPosition(float x, float y) {
+    _sprite.setPosition(x, y);
+}

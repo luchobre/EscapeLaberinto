@@ -20,5 +20,7 @@ public:
 	Enemigo2();
 	void draw(sf::RenderTarget& target, sf::RenderStates states)const override;
 	sf::FloatRect getBounds() const override;
+	sf::Vector2f getPosition() const;
+	void setPosition(float x, float y);
 };
 

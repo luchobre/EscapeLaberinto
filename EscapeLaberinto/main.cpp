@@ -20,8 +20,8 @@
 //VER SI ANDA BIEN ACA, SINO CAMBIARLO
 ArchivoPartida archivoPartidas("partida_guardada.dat");
 
-bool guardarPartidaActual(Personaje& guerrero, Enemigo& monstruo, Enemigo3& monstruo3, Item& item,
-    ItemPowerUp& itemPu, int puntos, int muertes, int timer, bool gameover) {
+bool guardarPartidaActual(Laberinto& laberinto, Personaje& guerrero, Enemigo& monstruo, Enemigo2& monstruo2, Enemigo3& monstruo3, Item& item,
+    ItemPowerUp& itemPu, int puntos, int muertes, int timer, bool gameover, int nivelActual) {
 
     GuardarPartida partida;
 
@@ -35,6 +35,9 @@ bool guardarPartidaActual(Personaje& guerrero, Enemigo& monstruo, Enemigo3& mons
     float velEnemigo = monstruo.getVelocidad();
     partida.setDatosEnemigo(posEnemigo.x, posEnemigo.y, dirEnemigo.x, dirEnemigo.y, velEnemigo);
 
+    sf::Vector2f posEnemigo2 = monstruo2.getPosition();
+    partida.setDatosEnemigo2(posEnemigo2.x, posEnemigo2.y);
+
     sf::Vector2f posEnemigo3 = monstruo3.getPosition();
     sf::Vector2f dirEnemigo3 = monstruo3.getDireccion();
     float velEnemigo3 = monstruo3.getVelocidad();
@@ -45,14 +48,14 @@ bool guardarPartidaActual(Personaje& guerrero, Enemigo& monstruo, Enemigo3& mons
 
     sf::Vector2f posItemPu = itemPu.getPosition();
     partida.setDatosItemPowerUp(posItemPu.x, posItemPu.y);
-
     partida.setEstadoJuego(puntos, muertes, timer, gameover);
+    partida.setNivelActual(nivelActual);
 
     return archivoPartidas.guardarPartida(partida);
 }
 
-void cargarPartidaGuardada(Personaje& guerrero, Enemigo& monstruo, Enemigo3& monstruo3, Item& item,
-    ItemPowerUp& itemPu, int& puntos, int& muertes, int& timer, bool& gameover) {
+void cargarPartidaGuardada(Laberinto& laberinto, Personaje& guerrero, Enemigo& monstruo, Enemigo2& monstruo2, Enemigo3& monstruo3, Item& item,
+    ItemPowerUp& itemPu, int& puntos, int& muertes, int& timer, bool& gameover, int& nivelActual) {
 
     GuardarPartida partida = archivoPartidas.cargarPartida();
 
@@ -67,6 +70,9 @@ void cargarPartidaGuardada(Personaje& guerrero, Enemigo& monstruo, Enemigo3& mon
     monstruo.setDireccion(dirX, dirY);
     monstruo.setVelocidad(velocidad);
 
+    partida.getDatosEnemigo2(x, y);
+    monstruo2.setPosition(x, y);
+
     partida.getDatosEnemigo3(x, y, dirX, dirY, velocidad);
     monstruo3.setPosition(x, y);
     monstruo3.setDireccion(dirX, dirY);
@@ -79,7 +85,9 @@ void cargarPartidaGuardada(Personaje& guerrero, Enemigo& monstruo, Enemigo3& mon
     itemPu.setPosition(x, y);
 
     partida.getEstadoJuego(puntos, muertes, timer, gameover);
+    nivelActual = partida.getNivelActual();
 }
+
 
 
 
@@ -413,7 +421,7 @@ int main()
                             estado = EN_JUEGO;
                         }
                         else if (opcion == 1) {  // NUEVA OPCION: GUARDAR PARTIDA
-                            if (guardarPartidaActual(guerrero, monstruo, monstruo3, item, itemPu, puntos, muertes, timer, gameover)) {
+                            if (guardarPartidaActual(laberinto, guerrero, monstruo, monstruo2, monstruo3, item, itemPu, puntos, muertes, timer, gameover, nivelActual)) {
                                 std::cout << "Partida guardada exitosamente!" << std::endl;
                             }
                             else {
@@ -455,7 +463,7 @@ int main()
             else if (estado == CARGANDO_PARTIDA) {
                 if (event.type == sf::Event::KeyPressed) {
                     if (event.key.code == sf::Keyboard::Num1 || event.key.code == sf::Keyboard::N) {
-                        cargarPartidaGuardada(guerrero, monstruo, monstruo3, item, itemPu, puntos, muertes, timer, gameover);
+                        cargarPartidaGuardada(laberinto, guerrero, monstruo, monstruo2, monstruo3, item, itemPu, puntos, muertes, timer, gameover, nivelActual);
                         estado = EN_JUEGO;
                     }
                     else if (event.key.code == sf::Keyboard::Num2 || event.key.code == sf::Keyboard::M) {
@@ -751,7 +759,7 @@ int main()
             if (!sonoWinGame) {
                 musicaNivel.stop();
                 sonidoWinGame.play();
-                sonoWinGame = true;
+                sonoWinGame = true;//EN TRUE ACA PARA QUE SUENE UNA VEZ SOLAMENTE
             }
             if (!cargada) {
                 if (!texWin.loadFromFile("youwin.png")) {
@@ -768,6 +776,7 @@ int main()
                 puntos = 0;
                 nivelActual = 1;
                 estado = EN_MENU;
+                sonoWinGame = false; //RESETEAR BANDERA
             }
         }
         window.display();

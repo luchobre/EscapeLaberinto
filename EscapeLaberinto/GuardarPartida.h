@@ -10,6 +10,8 @@ private:
         float enemigoX, enemigoY;
         float enemigoDirX, enemigoDirY; 
         float enemigoVelocidad;
+    //ENEMIGO2
+        float enemigo2X, enemigo2Y;
     //ENEMIGO3
         float enemigo3X, enemigo3Y;
         float enemigo3DirX, enemigo3DirY;
@@ -19,6 +21,7 @@ private:
         float itemPowerUpX, itemPowerUpY; 
     //ESTADO DEL JUEGO
         int puntuacion;
+        int nivelActual;
         int muertes;
         int timerPowerUp;
         bool gameOver;
@@ -29,19 +32,19 @@ public:
     //SETTERS PARA GUARDAR DATOS EN EL OBJETO DESDE EL JUEGO       
         void setDatosPersonaje(float x, float y, float velX, float velY);
         void setDatosEnemigo(float x, float y, float dirX, float dirY, float vel);
+        void setDatosEnemigo2(float x, float y);
         void setDatosEnemigo3(float x, float y, float dirX, float dirY, float vel);
         void setDatosItemNormal(float x, float y);
         void setDatosItemPowerUp(float x, float y);
         void setEstadoJuego(int pts, int mts, int timer, bool gameOver);
-
+        void setNivelActual(int nivel);
     //GETTERS PARA GUARDAR DATOS EN EL OBJETO DESDE EL JUEGO
         void getDatosPersonaje(float& x, float& y, float& velX, float& velY);
         void getDatosEnemigo(float& x, float& y, float& dirX, float& dirY, float& vel);
+        void getDatosEnemigo2(float& x, float& y);
         void getDatosEnemigo3(float& x, float& y, float& dirX, float& dirY, float& vel);
         void getDatosItemNormal(float& x, float& y);
         void getDatosItemPowerUp(float& x, float& y);
         void getEstadoJuego(int& pts, int& mts, int& timer, bool& gameOver);
-
-        //METODO PARA VALIDAR LOS DATOS GUARDADOS (SIN IMPLEMENTACION POR AHORA)
-        //bool esValida();
+        int getNivelActual();
     };
