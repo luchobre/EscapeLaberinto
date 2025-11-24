@@ -1,5 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS //PARA QUE VISUAL STUDIO TRABAJE BIEN CON LAS FUNCIONES DE ARCHIVO Y NO DE ERROR DE SEGURIDAD
 #include <SFML/Graphics.hpp>
+#include<SFML/Audio.hpp>
 #include <cstdlib>
 #include <iostream>
 #include <ctime>
@@ -101,7 +102,7 @@ int main()
     if (!texCorazonVacio.loadFromFile("corazonVacio.png"))
         std::cout << "Error: no se pudo cargar corazonVacio.png";
 
-     int NUM_VIDAS = 3;
+    int NUM_VIDAS = 3;
     std::vector<sf::Sprite> corazones(NUM_VIDAS);
     for (int i = 0; i < NUM_VIDAS; ++i) {
         corazones[i].setTexture(texCorazonLleno); // textura por defecto
@@ -109,24 +110,24 @@ int main()
     }
 
     //  altura  para los corazones
-     float targetHeight = 40.f;
+    float targetHeight = 40.f;
     float scaleLleno = targetHeight / static_cast<float>(texCorazonLleno.getSize().y);
     float scaleVacio = targetHeight / static_cast<float>(texCorazonVacio.getSize().y);
-    
+
     float espacio = 4.f;      // espacio entre corazones
     float margenDerecho = 10.f; // distancia al borde derecho
 
-    // anchos escalados según si el sprite estará lleno o vacío
+    // anchos escalados segun si el sprite estara lleno o vacio
     std::vector<float> scaledWidths(NUM_VIDAS);
     for (int i = 0; i < NUM_VIDAS; ++i) {
-        bool seraLleno = (i < NUM_VIDAS - muertes); // true si esta vida todavía existe
+        bool seraLleno = (i < NUM_VIDAS - muertes); // true si esta vida todavia existe
         if (seraLleno) {
             corazones[i].setTexture(texCorazonLleno);          // textura llena
             corazones[i].setScale(scaleLleno, scaleLleno);     // escala para igualar alto
             scaledWidths[i] = texCorazonLleno.getSize().x * scaleLleno;
         }
         else {
-            corazones[i].setTexture(texCorazonVacio);          // textura vacía
+            corazones[i].setTexture(texCorazonVacio);          // textura vacia
             corazones[i].setScale(scaleVacio, scaleVacio);     // escala para igualar alto
             scaledWidths[i] = texCorazonVacio.getSize().x * scaleVacio;
         }
@@ -139,7 +140,7 @@ int main()
         if (i < NUM_VIDAS - 1) totalWidth += espacio;
     }
 
-    // Posición inicial 
+    // Posicion inicial 
     float startX = static_cast<float>(window.getSize().x) - margenDerecho - totalWidth;
     float y = 10.f; // altura fija desde arriba 
 
@@ -152,6 +153,73 @@ int main()
     }
 
     Menu menu(window.getSize().x, window.getSize().y);
+
+    //MUSICA 
+    //MENU
+    sf::Music musicaMenu;
+    bool musicaMenuCargada = false; //BANDERA POR SI FALLA LA CARGA DEL ARCHIVO
+    if (!musicaMenu.openFromFile("loop-thriller.wav")) {
+        std::cout << "Error cargando musica" << std::endl;
+    }
+    else {
+        musicaMenuCargada = true;
+        musicaMenu.setLoop(true);
+        musicaMenu.setVolume(35);
+    }
+
+
+    //MUSICA NIVEL
+    sf::Music musicaNivel;
+    bool musicaNivelCargada = false; //BANDERA POR SI FALLA LA CARGA DEL ARCHIVO
+    if (!musicaNivel.openFromFile("spaceloop.wav")) {
+        std::cout << "Error cargando musica" << std::endl;
+    }
+    else {
+        musicaNivelCargada = true;
+        musicaNivel.setLoop(true);
+        musicaNivel.setVolume(30);
+    }
+
+    //EFECTOS DE SONIDO
+    //RECIBIENDO DAÑO
+    sf::SoundBuffer bufferDanio;
+    bufferDanio.loadFromFile("damage-sound.wav");
+
+    sf::Sound sonidoDanio;
+    sonidoDanio.setBuffer(bufferDanio);
+    sonidoDanio.setVolume(80);
+
+    //AGARRANDO ITEMS
+    sf::SoundBuffer bufferItem;
+    bufferItem.loadFromFile("item-sound.wav");
+
+    sf::Sound sonidoItem;
+    sonidoItem.setBuffer(bufferItem);
+    sonidoItem.setVolume(100);
+
+    sf::SoundBuffer bufferItemPu;
+    bufferItemPu.loadFromFile("powerup-sound.wav");
+
+    sf::Sound sonidoItemPu;
+    sonidoItemPu.setBuffer(bufferItemPu);
+    sonidoItemPu.setVolume(100);
+
+
+    //WIN GAME
+    sf::SoundBuffer bufferWinGame;
+    bufferWinGame.loadFromFile("victory-fanfarre.wav");
+
+    sf::Sound sonidoWinGame;
+    sonidoWinGame.setBuffer(bufferWinGame);
+    sonidoWinGame.setVolume(50);
+
+    //GAME OVER
+    sf::SoundBuffer bufferGameOver;
+    bufferGameOver.loadFromFile("game-over.wav");
+
+    sf::Sound sonidoGameOver;
+    sonidoGameOver.setBuffer(bufferGameOver);
+    sonidoGameOver.setVolume(90);
 
     enum EstadoJuego { EN_MENU, EN_CREDITOS, EN_JUEGO, EN_PAUSA, CARGANDO_PARTIDA, WIN };
     EstadoJuego estado = EN_MENU;
@@ -248,7 +316,7 @@ int main()
         laberinto.load("tileset1.png", { 32,32 }, level2.data(), 25, 20);
     else if (nivelActual == 3)
         laberinto.load("tileset1.png", { 32,32 }, level3.data(), 25, 20);
-   
+
     Item item;
     item.respawn(laberinto);
 
@@ -261,9 +329,29 @@ int main()
     int timer = 60 * 5;
     int puntos = 0;
 
-   
+
     while (window.isOpen())
     {
+        if (musicaMenuCargada) {
+            if ((estado == EN_MENU || estado == CARGANDO_PARTIDA || estado == EN_CREDITOS) &&
+                musicaMenu.getStatus() != sf::Music::Playing) {
+                musicaMenu.play();
+            }
+            else if (estado == EN_JUEGO && musicaMenu.getStatus() == sf::Music::Playing) {
+                musicaMenu.pause();
+            }
+        }
+        if (musicaNivelCargada) {
+            if ((estado == EN_JUEGO || estado == EN_PAUSA) &&
+                musicaNivel.getStatus() != sf::Music::Playing) {
+                musicaNivel.play();
+            }
+            else if (estado == EN_MENU || estado == CARGANDO_PARTIDA || estado == EN_CREDITOS &&
+                musicaNivel.getStatus() == sf::Music::Playing) {
+                musicaNivel.pause();
+            }
+        }
+
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -324,7 +412,7 @@ int main()
                         if (opcion == 0) {
                             estado = EN_JUEGO;
                         }
-                        else if (opcion == 1) {  // NUEVA OPCIÓN: GUARDAR PARTIDA
+                        else if (opcion == 1) {  // NUEVA OPCION: GUARDAR PARTIDA
                             if (guardarPartidaActual(guerrero, monstruo, monstruo3, item, itemPu, puntos, muertes, timer, gameover)) {
                                 std::cout << "Partida guardada exitosamente!" << std::endl;
                             }
@@ -389,6 +477,11 @@ int main()
                 }
             }
             else if (estado == EN_JUEGO && gameover) {
+                static bool sonoGameOver = false;//BANDERA PARA REPRODUCIR UNA SOLA VEZ
+                if (!sonoGameOver) {
+                    sonidoGameOver.play();
+                    sonoGameOver = true;
+                }
                 if (event.type == sf::Event::KeyPressed) {
                     if (event.key.code == sf::Keyboard::Enter) {
                         nivelActual = 1;
@@ -401,6 +494,7 @@ int main()
                         item.respawn(laberinto);
                         itemPu.respawn(laberinto);
                         gameover = false;
+                        sonoGameOver = false;
                     }
                     else if (event.key.code == sf::Keyboard::Escape) {
                         estado = EN_MENU;
@@ -412,12 +506,13 @@ int main()
                         item.respawn(laberinto);
                         itemPu.respawn(laberinto);
                         gameover = false;
+                        sonoGameOver = false;
                     }
                 }
             }
         }
-        
-            
+
+
         window.clear();
 
         if (estado == EN_MENU)
@@ -441,7 +536,7 @@ int main()
                 pregunta.setPosition(250.f, 260.f);
 
                 opciones.setFont(font);
-                opciones.setString(" [ENTER] Continuar      [ESC] Menu Principal ");
+                opciones.setString(" [ENTER] Reiniciar    [ESC] Menu Principal ");
                 opciones.setCharacterSize(18);
                 opciones.setFillColor(sf::Color::White);
                 opciones.setPosition(80.f, 320.f);
@@ -502,6 +597,8 @@ int main()
                 if (guerrero.isColisionable(item)) {
                     item.respawn(laberinto);
                     puntos++;
+                    sonidoItem.play();
+
 
                     // --- Cambio de nivel correcto ---
                     if (puntos >= 1 && nivelActual == 1) {
@@ -538,9 +635,11 @@ int main()
                     muertes++;
                     if (muertes >= 3)
                         gameover = true;
+                    sonidoDanio.play();
                 }
 
                 if (guerrero.isColisionable(monstruo2)) {
+                    sonidoDanio.play();
                     guerrero.respawnPj();
                     //puntos = 0;
                     guerrero.restartVelocity();
@@ -550,6 +649,17 @@ int main()
                 }
 
                 if (guerrero.isColisionable(monstruo3)) {
+                    sonidoDanio.play();
+                    guerrero.respawnPj();
+                    //puntos = 0;
+                    guerrero.restartVelocity();
+                    muertes++;
+                    if (muertes >= 3)
+                        gameover = true;
+                }
+
+                if (guerrero.isColisionable(monstruo3)) {
+                    sonidoDanio.play();
                     guerrero.respawnPj();
                     //puntos = 0;
                     guerrero.restartVelocity();
@@ -562,6 +672,7 @@ int main()
                     guerrero.addVelocity(1);
                     timer = 60 * 5;
                     itemPu.respawn(laberinto);
+                    sonidoItemPu.play();
                 }
 
                 text.setString("Puntaje: " + std::to_string(puntos));
@@ -636,6 +747,12 @@ int main()
         {
             static sf::Texture texWin;
             static bool cargada = false;
+            static bool sonoWinGame = false;
+            if (!sonoWinGame) {
+                musicaNivel.stop();
+                sonidoWinGame.play();
+                sonoWinGame = true;
+            }
             if (!cargada) {
                 if (!texWin.loadFromFile("youwin.png")) {
                     std::cout << "Error cargando youwin.png";
@@ -652,7 +769,7 @@ int main()
                 nivelActual = 1;
                 estado = EN_MENU;
             }
-                    }
+        }
         window.display();
     }
 

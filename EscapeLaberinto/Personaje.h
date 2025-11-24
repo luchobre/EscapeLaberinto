@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "SFML/Audio.hpp"
 #include "Colisionable.h"
 #include "Laberinto.h"
 
@@ -13,6 +14,10 @@ class Personaje :public sf::Drawable, public Colisionable
 	int _resDerX;
 	int _resSupY;
 	int _resInfY;
+	//Audio
+	sf::SoundBuffer bufferCaminar;
+	sf::Sound sonidoCaminar;
+	sf::Vector2i tileFrameAnterior;
 public:
 	Personaje();
 	void update(const Laberinto& laberinto);
@@ -23,7 +28,9 @@ public:
 	void restartVelocity();
 	//METODOS PARA GUARDAR Y CARGAR
 	sf::Vector2f getVelocity() const;
-	sf::Vector2f getPosition() const;     
+	sf::Vector2f getPosition() const;
 	void setVelocity(float velX, float velY);
 	void setPosition(float x, float y);
+	//METODO PARA OBTENER POSICION (PARA SONIDO DEL MOVIMIENTO)
+	sf::Vector2i getTilePosition(const Laberinto& laberinto) const;
 };

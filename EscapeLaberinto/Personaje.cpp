@@ -9,17 +9,31 @@ Personaje::Personaje()
     _sprite.setScale(0.5f, 0.5f);
     sf::FloatRect bounds = _sprite.getLocalBounds();
     _sprite.setOrigin(bounds.width / 2, bounds.height / 2);
+    //Audio
+    bufferCaminar.loadFromFile("step-on-stone.wav");
+    sonidoCaminar.setBuffer(bufferCaminar);
+    sonidoCaminar.setVolume(35);
 
 
     _resIzqX = 0;
     _resDerX = 800;
     _resSupY = 0;
     _resInfY = 600;
+
+    tileFrameAnterior = sf::Vector2i(-1, -1); //SE INICIALIZA ASI PARA QUE NO FALLE EN EL PRIMER FRAME
+}
+
+//OBTENER POSICION Y COMPARAR CON TAMAÑO DE TILES PARA VER SI SE MOVIO
+sf::Vector2i Personaje::getTilePosition(const Laberinto& laberinto) const {
+    sf::Vector2f pos = _sprite.getPosition();
+    sf::Vector2u tileSize = laberinto.getTileSize();
+    int tileX = static_cast<int>(pos.x) / tileSize.x;
+    int tileY = static_cast<int>(pos.y) / tileSize.y;
+    return sf::Vector2i(tileX, tileY);
 }
 
 void Personaje::update(const Laberinto& laberinto)
 {
-
     sf::Vector2f velocity = { 0,0 };
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
@@ -27,9 +41,8 @@ void Personaje::update(const Laberinto& laberinto)
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) {
-            velocity.y = _velocity.y;
+        velocity.y = _velocity.y;
     }
-
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
         velocity.x = _velocity.x;
     }
@@ -42,17 +55,26 @@ void Personaje::update(const Laberinto& laberinto)
         return;
     }
 
+    sf::Vector2i tileAntesDeCaminar = getTilePosition(laberinto);//GUARDAR POSICION PARA COMPARAR (EN ESTE FRAME DEL JUEGO)
     sf::FloatRect newBounds = _sprite.getGlobalBounds();
     newBounds.left += velocity.x;
     newBounds.top += velocity.y;
 
     sf::Vector2u tileSize = laberinto.getTileSize();
-
     bool puedeMoverse = laberinto.esCaminable(newBounds, tileSize);
-
     if (puedeMoverse) {
         _sprite.move(velocity);
     }
+    sf::Vector2i tileDespuesDeCaminar = getTilePosition(laberinto);//DETECTAR NUEVA POSICION (TAMBIEN PARA ESTE FRAME)
+    //COMPARAR SI SE MOVIO DE TILE Y ACTIVAR SONIDO
+    if (tileDespuesDeCaminar != tileAntesDeCaminar && puedeMoverse) {
+        sonidoCaminar.play();
+        //VELOCIDAD DE SONIDO (FALTA CORREGIR POR SI SUENA MUY ACELERADO)
+        float pitch = 0.5f + (_velocity.x * 0.05f);
+        sonidoCaminar.setPitch(std::max(0.5f, std::min(1.5f, pitch)));
+    }
+    //ACA SE GUARDA PARA LA PROXIMA COMPARACION EN EL SIGUIENTE FRAME
+    tileFrameAnterior = tileDespuesDeCaminar;
 
     if (velocity.x < 0) {
         _sprite.setScale(-0.5f, 0.5f);
@@ -83,6 +105,7 @@ void Personaje::draw(sf::RenderTarget& target, sf::RenderStates states) const
 void Personaje::respawnPj()
 {
     _sprite.setPosition(50, 50);
+    tileFrameAnterior = sf::Vector2i(-1, -1);//EN CASO DE RESPAWN RESETEA ESTO
 }
 
 void Personaje::addVelocity(float velocity)
