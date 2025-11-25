@@ -18,7 +18,6 @@ public:
     void MoveUpPausa();
     void MoveDownPausa();
     int GetPressedItemPausa();
-
 private:
     int selectedItemIndex;
     int selectedItemIndexPausa;
@@ -28,4 +27,6 @@ private:
     sf::Text textoVolver;     // texto “Presiona ESC…”
     sf::Text tituloCreditos;  // título de créditos
     sf::Text contenidoCreditos; // contenido de créditos
+    sf::Texture backgroundTexture;
+    sf::Sprite backgroundSprite;
 };

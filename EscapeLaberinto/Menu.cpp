@@ -1,32 +1,53 @@
 #include "Menu.h"
 #include <iostream>
 
+
+static void centrarTexto(sf::Text& t) {
+    sf::FloatRect b = t.getLocalBounds();
+    t.setOrigin(b.left + b.width / 2, b.top + b.height / 2);
+}
+
+
 Menu::Menu(float width, float height)
 {
+    //FONDO EDL MENU
+    if (!backgroundTexture.loadFromFile("fondoMenu.png")) {
+        std::cout << "Error cargando fondo del menu" << std::endl;
+    }
+    backgroundSprite.setTexture(backgroundTexture);
+    backgroundSprite.setScale(
+        width / backgroundSprite.getLocalBounds().width,
+        height / backgroundSprite.getLocalBounds().height
+    );
+    
+    
     if (!font.loadFromFile("PixelPurl.ttf"))
     {
         std::cout << "HUBO UN PROBLEMA AL CARGAR LA FUENTE" << std::endl;
     }
-
     //MENÚ PRINCIPAL
     menu[0].setFont(font);
     menu[0].setFillColor(sf::Color::Red);
     menu[0].setString("Continuar partida");
+    centrarTexto(menu[0]);
     menu[0].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENU + 1) * 1));
 
     menu[0].setFont(font);
     menu[0].setFillColor(sf::Color::Red);
     menu[0].setString("Jugar");
+    centrarTexto(menu[0]);
     menu[0].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENU + 1) * 1));
 
     menu[1].setFont(font);
     menu[1].setFillColor(sf::Color::White);
     menu[1].setString("Creditos");
+    centrarTexto(menu[1]);
     menu[1].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENU + 1) * 2));
 
     menu[2].setFont(font);
     menu[2].setFillColor(sf::Color::White);
     menu[2].setString("Salir");
+    centrarTexto(menu[2]);
     menu[2].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENU + 1) * 3));
 
     selectedItemIndex = 0;
@@ -35,21 +56,25 @@ Menu::Menu(float width, float height)
     menuPausa[0].setFont(font);
     menuPausa[0].setFillColor(sf::Color::Red);
     menuPausa[0].setString("Continuar");
+    centrarTexto(menuPausa[0]);
     menuPausa[0].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENUPAUSA + 1) * 1));
 
     menuPausa[1].setFont(font);
     menuPausa[1].setFillColor(sf::Color::White);
     menuPausa[1].setString("Guardar Partida");
+    centrarTexto(menuPausa[1]);
     menuPausa[1].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENUPAUSA + 1) * 2));
 
     menuPausa[2].setFont(font);
     menuPausa[2].setFillColor(sf::Color::White);
     menuPausa[2].setString("Reiniciar partida");
+    centrarTexto(menuPausa[2]);
     menuPausa[2].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENUPAUSA + 1) * 3));
 
     menuPausa[3].setFont(font);
     menuPausa[3].setFillColor(sf::Color::White);
     menuPausa[3].setString("Salir al menu principal");
+    centrarTexto(menuPausa[3]);
     menuPausa[3].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENUPAUSA + 1) * 4));
 
 
@@ -71,6 +96,7 @@ Menu::Menu(float width, float height)
 
 void Menu::draw(sf::RenderWindow& window)
 {
+    window.draw(backgroundSprite);
     for (int i = 0; i < ITEMS_MENU; i++)
     {
         window.draw(menu[i]);

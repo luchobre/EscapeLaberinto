@@ -18,6 +18,7 @@ Personaje::Personaje()
     _resIzqX = 0;
     _resDerX = 800;
     _resSupY = 0;
+    _resSupY = 0;
     _resInfY = 600;
 
     tileFrameAnterior = sf::Vector2i(-1, -1);

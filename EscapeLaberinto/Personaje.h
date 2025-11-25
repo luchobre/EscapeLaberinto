@@ -33,4 +33,5 @@ public:
 	void setPosition(float x, float y);
 	//METODO PARA OBTENER POSICION (PARA SONIDO DEL MOVIMIENTO)
 	sf::Vector2i getTilePosition(const Laberinto& laberinto) const;
+
 };
