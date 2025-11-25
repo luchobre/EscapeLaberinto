@@ -59,6 +59,8 @@ void cargarPartidaGuardada(Laberinto& laberinto, Personaje& guerrero, Enemigo& m
 
     GuardarPartida partida = archivoPartidas.cargarPartida();
 
+
+
     float x, y, velX, velY, dirX, dirY, velocidad;
 
     partida.getDatosPersonaje(x, y, velX, velY);
@@ -254,7 +256,7 @@ int main()
         3,0,0,3,3,3,3,3,3,0,3,3,3,3,0,3,3,3,0,3,3,0,3,0,3,
         3,0,0,0,0,0,0,0,3,0,0,0,0,3,0,0,0,3,0,0,0,0,3,0,3,
         3,0,3,3,3,3,3,0,3,3,3,3,0,3,3,3,0,3,3,3,3,0,3,0,3,
-        3,0,0,0,0,0,3,0,0,0,0,3,0,0,0,3,0,0,0,0,3,0,0,0,3,
+        3,0,0,0,0,0,3,0,0,0,0,0,0,0,0,3,0,0,0,0,3,0,0,0,3,
         3,3,3,3,0,0,3,3,3,3,0,0,0,3,0,3,3,3,3,0,3,3,3,0,3,
         3,0,0,3,0,0,0,0,0,3,0,0,0,3,0,0,0,0,3,0,0,0,3,3,3,
         3,0,0,3,0,3,3,3,0,3,3,3,0,3,3,3,0,3,3,3,0,3,0,0,3,
@@ -273,16 +275,16 @@ int main()
         3,0,3,3,3,3,3,0,3,3,3,0,3,3,0,3,3,3,3,3,3,3,0,0,3,
         3,0,0,0,0,0,3,0,0,0,3,0,3,0,0,0,0,0,0,3,0,3,0,0,3,
         3,3,3,3,0,0,3,3,3,0,3,0,3,3,3,3,0,3,0,3,0,3,3,0,3,
-        3,0,0,3,0,0,0,0,3,0,0,0,0,0,2,3,0,0,0,3,0,0,3,0,3,
-        3,0,0,3,3,3,3,0,3,3,3,3,3,0,2,3,3,3,0,3,3,0,3,0,3,
-        3,0,0,0,0,0,0,0,3,0,0,0,3,0,1,0,0,3,0,0,0,0,3,0,3,
-        3,0,3,3,3,3,3,0,3,3,3,0,3,0,1,0,3,3,3,3,3,0,3,0,3,
-        3,0,0,0,0,0,3,0,0,0,3,0,0,0,0,0,0,0,0,3,0,0,3,0,3,
-        3,3,3,3,0,0,3,3,3,0,0,0,0,3,0,3,3,3,3,3,0,3,3,0,3,
+        3,0,0,3,0,0,0,0,3,0,0,0,0,0,0,3,0,0,0,3,0,0,3,0,3,
+        3,0,0,3,3,3,3,0,3,3,3,3,3,0,0,3,3,3,0,3,3,0,3,0,3,
+        3,0,0,0,0,0,0,0,3,0,0,0,3,0,1,1,1,3,0,0,0,0,3,0,3,
+        3,0,3,3,3,3,3,0,3,3,3,0,3,0,1,1,1,3,3,3,3,0,3,0,3,
+        3,0,0,0,0,0,3,0,0,0,3,0,0,0,0,0,1,0,0,3,0,0,3,0,3,
+        3,3,3,3,0,0,3,3,3,0,0,0,0,3,0,0,1,3,3,3,0,3,3,0,3,
         3,0,0,3,0,0,0,0,3,0,0,0,0,3,0,0,0,0,3,0,0,0,3,3,3,
         3,0,0,3,0,3,3,3,3,0,3,0,3,3,3,3,0,3,3,3,0,3,0,0,3,
         3,0,0,0,0,0,0,3,0,0,3,0,0,0,0,3,0,0,0,0,0,0,0,0,3,
-        3,3,3,3,3,3,0,3,3,0,3,3,3,3,0,3,3,3,3,3,3,3,3,0,3,
+        3,2,2,2,2,2,0,3,3,0,3,3,3,3,0,3,3,3,3,3,3,3,3,0,3,
         3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
         3,0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,0,3,
         3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
@@ -293,13 +295,13 @@ int main()
     constexpr std::array level3 = {
         0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
         0,0,0,0,0,0,3,0,0,0,3,0,0,0,3,0,0,0,0,0,0,0,0,0,3,
-        3,0,3,3,3,0,3,0,3,0,4,0,3,0,3,0,3,3,4,3,3,3,0,0,3,
+        3,0,3,3,3,0,3,0,3,0,3,0,3,0,3,0,3,3,3,3,3,3,0,0,3,
         3,0,3,0,0,0,3,0,3,0,3,0,3,0,3,0,0,0,0,0,0,3,0,0,3,
         3,0,3,0,3,3,3,0,3,0,0,0,3,0,3,3,3,3,3,3,0,3,0,0,3,
         3,0,0,0,3,0,0,0,3,0,0,0,3,0,0,0,0,0,0,0,0,3,0,0,3,
         3,0,0,0,3,0,3,3,3,3,3,0,3,3,3,3,3,3,0,3,0,3,3,0,3,
         3,0,3,0,0,0,3,0,0,0,3,0,0,0,3,0,0,3,0,3,0,0,0,0,3,
-        3,0,3,3,3,0,3,0,4,0,3,3,3,0,3,0,3,4,0,3,0,3,3,0,3,
+        3,0,3,3,3,0,3,0,3,0,3,3,3,0,3,0,3,3,0,3,0,3,3,0,3,
         3,0,0,0,3,0,3,0,3,0,0,0,0,0,3,0,0,0,0,3,0,0,3,0,3,
         3,3,3,0,3,0,3,0,3,3,0,0,0,0,3,0,3,3,3,3,0,3,3,0,3,
         3,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,3,3,3,
@@ -321,9 +323,9 @@ int main()
     if (nivelActual == 1)
         laberinto.load("tileset1.png", { 32,32 }, level1.data(), 25, 20);
     else if (nivelActual == 2)
-        laberinto.load("tileset1.png", { 32,32 }, level2.data(), 25, 20);
+        laberinto.load("tileset2.png", { 32,32 }, level2.data(), 25, 20);
     else if (nivelActual == 3)
-        laberinto.load("tileset1.png", { 32,32 }, level3.data(), 25, 20);
+        laberinto.load("tileset3.png", { 32,32 }, level3.data(), 25, 20);
 
     Item item;
     item.respawn(laberinto);
@@ -464,10 +466,17 @@ int main()
                 if (event.type == sf::Event::KeyPressed) {
                     if (event.key.code == sf::Keyboard::Num1 || event.key.code == sf::Keyboard::N) {
                         cargarPartidaGuardada(laberinto, guerrero, monstruo, monstruo2, monstruo3, item, itemPu, puntos, muertes, timer, gameover, nivelActual);
+                        if (nivelActual == 1)
+                            laberinto.load("tileset1.png", { 32,32 }, level1.data(), 25, 20);
+                        else if (nivelActual == 2)
+                            laberinto.load("tileset2.png", { 32,32 }, level2.data(), 25, 20);
+                        else if (nivelActual == 3)
+                            laberinto.load("tileset3.png", { 32,32 }, level3.data(), 25, 20);
                         estado = EN_JUEGO;
                     }
                     else if (event.key.code == sf::Keyboard::Num2 || event.key.code == sf::Keyboard::M) {
                         archivoPartidas.eliminarPartidaGuardada();
+                        laberinto.load("tileset1.png", { 32,32 }, level1.data(), 25, 20);
                         guerrero.respawnPj();
                         item.respawn(laberinto);
                         itemPu.respawn(laberinto);
@@ -611,7 +620,7 @@ int main()
                     // --- Cambio de nivel correcto ---
                     if (puntos >= 1 && nivelActual == 1) {
                         nivelActual = 2;
-                        laberinto.load("tileset1.png", { 32,32 }, level2.data(), 25, 20);
+                        laberinto.load("tileset2.png", { 32,32 }, level2.data(), 25, 20);
                         guerrero.respawnPj();
                         monstruo.respawn(laberinto);
                         monstruo3.respawn(laberinto);
@@ -622,7 +631,7 @@ int main()
                     }
                     else if (puntos >= 2 && nivelActual == 2) {
                         nivelActual = 3;
-                        laberinto.load("tileset1.png", { 32,32 }, level3.data(), 25, 20);
+                        laberinto.load("tileset3.png", { 32,32 }, level3.data(), 25, 20);
                         guerrero.respawnPj();
                         monstruo.respawn(laberinto);
                         monstruo3.respawn(laberinto);
@@ -638,6 +647,10 @@ int main()
 
                 if (guerrero.isColisionable(monstruo)) {
                     guerrero.respawnPj();
+                    monstruo.respawn(laberinto);
+                    monstruo3.respawn(laberinto);
+                    item.respawn(laberinto);
+                    itemPu.respawn(laberinto);
                     //puntos = 0;
                     guerrero.restartVelocity();
                     muertes++;
@@ -649,6 +662,10 @@ int main()
                 if (guerrero.isColisionable(monstruo2)) {
                     sonidoDanio.play();
                     guerrero.respawnPj();
+                    monstruo.respawn(laberinto);
+                    monstruo3.respawn(laberinto);
+                    item.respawn(laberinto);
+                    itemPu.respawn(laberinto);
                     //puntos = 0;
                     guerrero.restartVelocity();
                     muertes++;
@@ -659,16 +676,10 @@ int main()
                 if (guerrero.isColisionable(monstruo3)) {
                     sonidoDanio.play();
                     guerrero.respawnPj();
-                    //puntos = 0;
-                    guerrero.restartVelocity();
-                    muertes++;
-                    if (muertes >= 3)
-                        gameover = true;
-                }
-
-                if (guerrero.isColisionable(monstruo3)) {
-                    sonidoDanio.play();
-                    guerrero.respawnPj();
+                    monstruo.respawn(laberinto);
+                    monstruo3.respawn(laberinto);
+                    item.respawn(laberinto);
+                    itemPu.respawn(laberinto);
                     //puntos = 0;
                     guerrero.restartVelocity();
                     muertes++;

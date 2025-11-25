@@ -4,7 +4,7 @@
 Personaje::Personaje()
 {
     _velocity = { 2,2 };
-    _texture.loadFromFile("playerIcon.png");
+    _texture.loadFromFile("playerIcon4.png");
     _sprite.setTexture(_texture);
     _sprite.setScale(0.5f, 0.5f);
     sf::FloatRect bounds = _sprite.getLocalBounds();
