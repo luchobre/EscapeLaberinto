@@ -385,6 +385,7 @@ int main()
                             }
                             else {
                                 guerrero.respawnPj();
+                                guerrero.restartVelocity();
                                 monstruo.respawn(laberinto);
                                 monstruo3.respawn(laberinto);
                                 item.respawn(laberinto);
@@ -437,6 +438,7 @@ int main()
                             muertes = 0;
                             puntos = 0;
                             guerrero.respawnPj();
+                            guerrero.restartVelocity();
                             item.respawn(laberinto);
                             itemPu.respawn(laberinto);
                             monstruo.respawn(laberinto);
@@ -450,6 +452,7 @@ int main()
                             muertes = 0;
                             puntos = 0;
                             guerrero.respawnPj();
+                            guerrero.restartVelocity();
                             item.respawn(laberinto);
                             itemPu.respawn(laberinto);
                             monstruo.respawn(laberinto);
@@ -482,6 +485,7 @@ int main()
                         itemPu.respawn(laberinto);
                         monstruo.respawn(laberinto);
                         monstruo3.respawn(laberinto);
+                        guerrero.restartVelocity();
                         puntos = 0;
                         muertes = 0;
                         timer = 60 * 5;
@@ -508,6 +512,7 @@ int main()
                         guerrero.respawnPj();
                         monstruo.respawn(laberinto);
                         monstruo3.respawn(laberinto);
+                        guerrero.restartVelocity();
                         item.respawn(laberinto);
                         itemPu.respawn(laberinto);
                         gameover = false;
@@ -520,6 +525,7 @@ int main()
                         guerrero.respawnPj();
                         monstruo.respawn(laberinto);
                         monstruo3.respawn(laberinto);
+                        guerrero.restartVelocity();
                         item.respawn(laberinto);
                         itemPu.respawn(laberinto);
                         gameover = false;
@@ -573,6 +579,7 @@ int main()
                         guerrero.respawnPj();
                         monstruo.respawn(laberinto);
                         monstruo3.respawn(laberinto);
+                        guerrero.restartVelocity();
                         item.respawn(laberinto);
                         itemPu.respawn(laberinto);
                         gameover = false;
@@ -587,6 +594,7 @@ int main()
                         guerrero.respawnPj();
                         monstruo.respawn(laberinto);
                         monstruo3.respawn(laberinto);
+                        guerrero.restartVelocity();
                         item.respawn(laberinto);
                         itemPu.respawn(laberinto);
                         gameover = false;
@@ -624,6 +632,7 @@ int main()
                         guerrero.respawnPj();
                         monstruo.respawn(laberinto);
                         monstruo3.respawn(laberinto);
+                        guerrero.restartVelocity();
                         item.respawn(laberinto);
                         itemPu.respawn(laberinto);
 
@@ -635,6 +644,7 @@ int main()
                         guerrero.respawnPj();
                         monstruo.respawn(laberinto);
                         monstruo3.respawn(laberinto);
+                        guerrero.restartVelocity();
                         item.respawn(laberinto);
                         itemPu.respawn(laberinto);
 

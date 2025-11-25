@@ -20,10 +20,8 @@ Personaje::Personaje()
     _resSupY = 0;
     _resInfY = 600;
 
-    tileFrameAnterior = sf::Vector2i(-1, -1); //SE INICIALIZA ASI PARA QUE NO FALLE EN EL PRIMER FRAME
+    tileFrameAnterior = sf::Vector2i(-1, -1);
 }
-
-//OBTENER POSICION Y COMPARAR CON TAMAÑO DE TILES PARA VER SI SE MOVIO
 sf::Vector2i Personaje::getTilePosition(const Laberinto& laberinto) const {
     sf::Vector2f pos = _sprite.getPosition();
     sf::Vector2u tileSize = laberinto.getTileSize();
@@ -31,7 +29,6 @@ sf::Vector2i Personaje::getTilePosition(const Laberinto& laberinto) const {
     int tileY = static_cast<int>(pos.y) / tileSize.y;
     return sf::Vector2i(tileX, tileY);
 }
-
 void Personaje::update(const Laberinto& laberinto)
 {
     sf::Vector2f velocity = { 0,0 };
@@ -55,17 +52,41 @@ void Personaje::update(const Laberinto& laberinto)
         return;
     }
 
-    sf::Vector2i tileAntesDeCaminar = getTilePosition(laberinto);//GUARDAR POSICION PARA COMPARAR (EN ESTE FRAME DEL JUEGO)
+    sf::Vector2i tileAntesDeCaminar = getTilePosition(laberinto);
     sf::FloatRect newBounds = _sprite.getGlobalBounds();
     newBounds.left += velocity.x;
     newBounds.top += velocity.y;
 
+
+
+
     sf::Vector2u tileSize = laberinto.getTileSize();
     bool puedeMoverse = laberinto.esCaminable(newBounds, tileSize);
-    if (puedeMoverse) {
-        _sprite.move(velocity);
+
+    int steps = std::max(std::abs((int)velocity.x), std::abs((int)velocity.y));
+    if (steps == 0) steps = 1;
+
+    sf::Vector2f unitStep = sf::Vector2f(velocity.x / steps, velocity.y / steps);
+
+    for (int i = 0; i < steps; i++) {
+        sf::FloatRect testBounds = _sprite.getGlobalBounds();
+        testBounds.left += unitStep.x;
+        testBounds.top += unitStep.y;
+
+        if (laberinto.esCaminable(testBounds, tileSize)) {
+            _sprite.move(unitStep);
+        }
+        else {
+            break;
+        }
     }
-    sf::Vector2i tileDespuesDeCaminar = getTilePosition(laberinto);//DETECTAR NUEVA POSICION (TAMBIEN PARA ESTE FRAME)
+
+
+
+
+
+
+    sf::Vector2i tileDespuesDeCaminar = getTilePosition(laberinto);
     //COMPARAR SI SE MOVIO DE TILE Y ACTIVAR SONIDO
     if (tileDespuesDeCaminar != tileAntesDeCaminar && puedeMoverse) {
         sonidoCaminar.play();
