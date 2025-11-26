@@ -35,18 +35,21 @@ Menu::Menu(float width, float height)
     menu[0].setFont(font);
     menu[0].setFillColor(sf::Color::Red);
     menu[0].setString("Jugar");
+    menu[0].setCharacterSize(60);
     centrarTexto(menu[0]);
     menu[0].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENU + 1) * 1));
 
     menu[1].setFont(font);
     menu[1].setFillColor(sf::Color::White);
     menu[1].setString("Creditos");
+    menu[1].setCharacterSize(60);
     centrarTexto(menu[1]);
     menu[1].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENU + 1) * 2));
 
     menu[2].setFont(font);
     menu[2].setFillColor(sf::Color::White);
     menu[2].setString("Salir");
+    menu[2].setCharacterSize(60);
     centrarTexto(menu[2]);
     menu[2].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENU + 1) * 3));
 
@@ -56,24 +59,28 @@ Menu::Menu(float width, float height)
     menuPausa[0].setFont(font);
     menuPausa[0].setFillColor(sf::Color::Red);
     menuPausa[0].setString("Continuar");
+    menuPausa[0].setCharacterSize(40);
     centrarTexto(menuPausa[0]);
     menuPausa[0].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENUPAUSA + 1) * 1));
 
     menuPausa[1].setFont(font);
     menuPausa[1].setFillColor(sf::Color::White);
     menuPausa[1].setString("Guardar Partida");
+    menuPausa[1].setCharacterSize(40);
     centrarTexto(menuPausa[1]);
     menuPausa[1].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENUPAUSA + 1) * 2));
 
     menuPausa[2].setFont(font);
     menuPausa[2].setFillColor(sf::Color::White);
     menuPausa[2].setString("Reiniciar partida");
+    menuPausa[2].setCharacterSize(40);
     centrarTexto(menuPausa[2]);
     menuPausa[2].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENUPAUSA + 1) * 3));
 
     menuPausa[3].setFont(font);
     menuPausa[3].setFillColor(sf::Color::White);
     menuPausa[3].setString("Salir al menu principal");
+    menuPausa[3].setCharacterSize(40);
     centrarTexto(menuPausa[3]);
     menuPausa[3].setPosition(sf::Vector2f(width / 2, height / (ITEMS_MENUPAUSA + 1) * 4));
 

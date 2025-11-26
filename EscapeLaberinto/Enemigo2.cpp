@@ -3,9 +3,10 @@
 
 Enemigo2::Enemigo2()
 {
-    _texture.loadFromFile("swish_skele_abomination.png");
+    _texture.loadFromFile("swish_skele_abomination1.png");
     _sprite.setTexture(_texture);
-    _sprite.setScale(0.9f, 0.9f);
+    //_sprite.setScale(0.9f, 0.9f);
+    _sprite.setScale(0.1f, 0.1f);
     _sprite.setPosition(350.f, 320.f);
 
     _velocidad = 0;

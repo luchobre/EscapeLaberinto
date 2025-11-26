@@ -6,9 +6,9 @@
 
 Enemigo::Enemigo()
 {
-    _texture.loadFromFile("swish_crocman.png");
+    _texture.loadFromFile("swish_crocman1.png");
     _sprite.setTexture(_texture);
-    _sprite.setScale(0.7f, 0.7f);
+    _sprite.setScale(0.1f, 0.1f);
 
     sf::FloatRect bounds = _sprite.getLocalBounds();
     _sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
@@ -56,7 +56,17 @@ void Enemigo::update(const Laberinto& laberinto)
         _sprite.setPosition(nuevaPos);
     else
         cambiarDireccion();
+        
+    if (_direccion.x < 0) {
+        _sprite.setScale(0.1f, 0.1f);
+    }
+    else if (_direccion.x > 0) {
+        _sprite.setScale(-0.1f, 0.1f);
+    }
+
 }
+
+
 
 void Enemigo::cambiarDireccion()
 {

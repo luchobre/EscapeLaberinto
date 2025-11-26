@@ -4,9 +4,9 @@
 Personaje::Personaje()
 {
     _velocity = { 2,2 };
-    _texture.loadFromFile("playerIcon4.png");
+    _texture.loadFromFile("playerIcon4a.png");
     _sprite.setTexture(_texture);
-    _sprite.setScale(0.5f, 0.5f);
+    _sprite.setScale(0.09f, 0.09f);
     sf::FloatRect bounds = _sprite.getLocalBounds();
     _sprite.setOrigin(bounds.width / 2, bounds.height / 2);
     //Audio
@@ -83,10 +83,6 @@ void Personaje::update(const Laberinto& laberinto)
     }
 
 
-
-
-
-
     sf::Vector2i tileDespuesDeCaminar = getTilePosition(laberinto);
     //COMPARAR SI SE MOVIO DE TILE Y ACTIVAR SONIDO
     if (tileDespuesDeCaminar != tileAntesDeCaminar && puedeMoverse) {
@@ -99,10 +95,10 @@ void Personaje::update(const Laberinto& laberinto)
     tileFrameAnterior = tileDespuesDeCaminar;
 
     if (velocity.x < 0) {
-        _sprite.setScale(-0.5f, 0.5f);
+        _sprite.setScale(-0.09f, 0.09f);
     }
     else if (velocity.x > 0) {
-        _sprite.setScale(0.5f, 0.5f);
+        _sprite.setScale(0.09f, 0.09f);
     }
 
     if (_sprite.getPosition().x < _resIzqX + _sprite.getGlobalBounds().width / 2)

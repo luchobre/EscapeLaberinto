@@ -59,8 +59,6 @@ void cargarPartidaGuardada(Laberinto& laberinto, Personaje& guerrero, Enemigo& m
 
     GuardarPartida partida = archivoPartidas.cargarPartida();
 
-
-
     float x, y, velX, velY, dirX, dirY, velocidad;
 
     partida.getDatosPersonaje(x, y, velX, velY);
@@ -90,9 +88,6 @@ void cargarPartidaGuardada(Laberinto& laberinto, Personaje& guerrero, Enemigo& m
     nivelActual = partida.getNivelActual();
 }
 
-
-
-
 int main()
 {
     int muertes = 0;
@@ -107,10 +102,10 @@ int main()
     // -- Carga de corazones para la vida 
 
     sf::Texture texCorazonLleno, texCorazonVacio;
-    if (!texCorazonLleno.loadFromFile("corazonRojo.png"))
-        std::cout << "Error: no se pudo cargar corazonRojo.png";
-    if (!texCorazonVacio.loadFromFile("corazonVacio.png"))
-        std::cout << "Error: no se pudo cargar corazonVacio.png";
+    if (!texCorazonLleno.loadFromFile("corazonRojo1.png"))
+        std::cout << "Error: no se pudo cargar corazonRojo1.png";
+    if (!texCorazonVacio.loadFromFile("corazonVacio1.png"))
+        std::cout << "Error: no se pudo cargar corazonVacio1.png";
 
     int NUM_VIDAS = 3;
     std::vector<sf::Sprite> corazones(NUM_VIDAS);
@@ -265,7 +260,7 @@ int main()
         3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
         3,0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,0,3,
         3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
-        3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
+        3,0,0,0,3,0,3,0,3,0,3,0,3,0,3,0,3,0,3,0,3,0,0,0,3,
         3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3
     };
 
@@ -315,10 +310,6 @@ int main()
         3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3
     };
 
-    constexpr std::array level4 = {
-        0
-    };
-
     Laberinto laberinto;
     if (nivelActual == 1)
         laberinto.load("tileset1.png", { 32,32 }, level1.data(), 25, 20);
@@ -334,6 +325,7 @@ int main()
     itemPu.respawn(laberinto);
 
     monstruo.respawn(laberinto);
+
     monstruo3.respawn(laberinto);
 
     int timer = 60 * 5;
@@ -442,6 +434,7 @@ int main()
                             item.respawn(laberinto);
                             itemPu.respawn(laberinto);
                             monstruo.respawn(laberinto);
+                            monstruo2.setPosition(350.f, 320.f);
                             monstruo3.respawn(laberinto);
                             gameover = false;
                         }
@@ -456,6 +449,7 @@ int main()
                             item.respawn(laberinto);
                             itemPu.respawn(laberinto);
                             monstruo.respawn(laberinto);
+                            monstruo2.setPosition(350.f, 320.f);
                             monstruo3.respawn(laberinto);
                             gameover = false;
                         }
@@ -511,6 +505,7 @@ int main()
                         puntos = 0;
                         guerrero.respawnPj();
                         monstruo.respawn(laberinto);
+                        monstruo2.setPosition(350.f, 320.f);
                         monstruo3.respawn(laberinto);
                         guerrero.restartVelocity();
                         item.respawn(laberinto);
@@ -524,6 +519,7 @@ int main()
                         puntos = 0;
                         guerrero.respawnPj();
                         monstruo.respawn(laberinto);
+                        monstruo2.setPosition(350.f, 320.f);
                         monstruo3.respawn(laberinto);
                         guerrero.restartVelocity();
                         item.respawn(laberinto);
@@ -578,6 +574,7 @@ int main()
                         puntos = 0;
                         guerrero.respawnPj();
                         monstruo.respawn(laberinto);
+                        monstruo2.setPosition(350.f, 320.f);
                         monstruo3.respawn(laberinto);
                         guerrero.restartVelocity();
                         item.respawn(laberinto);
@@ -593,6 +590,7 @@ int main()
                         puntos = 0;
                         guerrero.respawnPj();
                         monstruo.respawn(laberinto);
+                        monstruo2.setPosition(350.f, 320.f);
                         monstruo3.respawn(laberinto);
                         guerrero.restartVelocity();
                         item.respawn(laberinto);
@@ -623,14 +621,13 @@ int main()
                     item.respawn(laberinto);
                     puntos++;
                     sonidoItem.play();
-
-
-                    // --- Cambio de nivel correcto ---
+                    //Cambio de nivel correcto
                     if (puntos >= 1 && nivelActual == 1) {
                         nivelActual = 2;
                         laberinto.load("tileset2.png", { 32,32 }, level2.data(), 25, 20);
                         guerrero.respawnPj();
                         monstruo.respawn(laberinto);
+                        monstruo2.setPosition(450.f, 320.f);
                         monstruo3.respawn(laberinto);
                         guerrero.restartVelocity();
                         item.respawn(laberinto);
@@ -643,6 +640,7 @@ int main()
                         laberinto.load("tileset3.png", { 32,32 }, level3.data(), 25, 20);
                         guerrero.respawnPj();
                         monstruo.respawn(laberinto);
+                        monstruo2.setPosition(550.f, 320.f);
                         monstruo3.respawn(laberinto);
                         guerrero.restartVelocity();
                         item.respawn(laberinto);
@@ -661,7 +659,6 @@ int main()
                     monstruo3.respawn(laberinto);
                     item.respawn(laberinto);
                     itemPu.respawn(laberinto);
-                    //puntos = 0;
                     guerrero.restartVelocity();
                     muertes++;
                     if (muertes >= 3)
@@ -676,7 +673,6 @@ int main()
                     monstruo3.respawn(laberinto);
                     item.respawn(laberinto);
                     itemPu.respawn(laberinto);
-                    //puntos = 0;
                     guerrero.restartVelocity();
                     muertes++;
                     if (muertes >= 3)
@@ -690,7 +686,6 @@ int main()
                     monstruo3.respawn(laberinto);
                     item.respawn(laberinto);
                     itemPu.respawn(laberinto);
-                    //puntos = 0;
                     guerrero.restartVelocity();
                     muertes++;
                     if (muertes >= 3)
@@ -705,6 +700,7 @@ int main()
                 }
 
                 text.setString("Puntaje: " + std::to_string(puntos));
+                text.setPosition(10.0f, 10.0f);
                 text.setCharacterSize(15);
                 text.setFillColor(sf::Color::Red);
                 text.setLetterSpacing(3);
